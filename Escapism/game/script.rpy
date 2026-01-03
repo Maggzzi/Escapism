@@ -3,6 +3,16 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
+# Zuha character defined
+define z = Character("Zuha", color="#6fa758")
+
+#Noor character defined
+define n = Character("Noor", color="#ddbf22")
+
+#lg (little girl) character defined
+define lg = Character("???", color="#b84756")
+
+
 define e = Character("Eileen")
 
 
@@ -24,6 +34,9 @@ label start:
 
     # These display lines of dialogue.
 
+    z "Wow im alive!! Zuha Hassan in the flesh!"
+    n "Uhh im here too yk..."
+    lg "Im the girl from your dream silly!"
     e "You've created a new Ren'Py game."
 
     e "Once you add a story, pictures, and music, you can release it to the world!"
