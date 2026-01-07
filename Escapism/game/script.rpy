@@ -113,8 +113,8 @@ label start:
     z "{cps=35}..I must've ran off in a fit of anger, because of {i}them{/i}.{/cps}"
     z "{cps=35}{i}They're{/i} such a pain, i dont want to complain to the counsellor either. Too much of a hassle.{/cps}"
     z "{cps=35}The worst part is that i'm not even aware of who's been behind it all.{/cps}"
-    z "{cps=35}Stealing my notebooks, sticking gum on my clothes and now my coat?{/cps}"
-    z "{cps=35}Nevertheless, i also can't remember where i was planning to go.{/cps}"
+    z "{cps=35}Stealing my notebooks, sticking gum onto my clothes and now my coat?{/cps}"
+    z "{cps=35}Nevertheless, i also can't remember why i'm outside in the first place, was i going home from school?{/cps}"
     z "{cps=35}This isn't even the way back home.. where am i go-{/cps}"
 
     stop music fadeout 1.0
@@ -135,7 +135,7 @@ label start:
     lg "{cps=40}That was such a hard throw to pull off..{/cps}"
     lg "{cps=40}But i STILL did it! a HEADSHOT at that!!{/cps}"
     z "{cps=15}Uhm..{/cps}"
-    lg "{cps=40}Oh, sorry, did I brag too much? It's just been ages since i've had aim this good-especially in a snowstorm like this?{/cps}"
+    lg "{cps=40}Oh, sorry, did I brag too much? It's just been ages since i've had aim this good - especially in a snowstorm like this?{/cps}"
     lg "{cps=40}You'd think im lying, but well, it's you that got hit, so you gotta, no HAVE to believe it!{/cps}"
     lg "{cps=40}Besides, we're bff's right? i wouldn't do that to just to any stranger!{/cps}"
     z "{cps=5}...{/cps}"
@@ -143,7 +143,7 @@ label start:
     z "{cps=15}and YOU?{/cps}"
     lg "{cps=35}wh- come on! I know its hard to recognize me because of the mist, but you can't be this dense! Are you doing it on purpose??{/cps}"
     lg "{cps=35}..Hehe, or did i hit you'r head {size=+5}that{/size} hard?{/cps}"
-    z "{cps=40}Look kid.. i don't know what you're babbling about, but i need to go home!{/cps}"
+    z "{cps=40}Look kid.. i don't know what you're babbling about, but i need to get home!{/cps}"
     lg "{cps=15}...{/cps}"
     lg "{cps=40}Assuming {i}those{/i} odds, there's only a one-in-a-million chance you'll get there{/cps}"
     lg "{cps=40}The other options are: A, slipping off the pavement and hitting you're head for real, or B, get into an accident.{/cps}"
@@ -153,14 +153,14 @@ label start:
     z "{cps=35}??? right NOW? you just said-{/cps}"
     lg "{cps=35}What? seems to me that your'e just too scared to lose!~{/cps}"
     lg "{cps=35}Don't worry, ill fake it and let you win, but only once!"
-    z "{cps=35}I'm sorry, but i can't play with you. i'm even turning purple as we spe-"
+    z "{cps=35}I'm sorry, but i can't play with you. I really need to get home and so do yo-"
     lg "{cps=75}After this i'll tell you the way to get back home, whether you lose or not!{/cps}"
     lg "{cps=35}I know my way around here better than you, heck - i'll even walk you to your place so options A and B don't happen!~"
 
     scene black 
     "{cps=35}...{/cps}"
-    "{cps=40}{i}I don't trust this at all.{/i}{/cps}"
-    "{cps=40}{i}First of all, why does she keep referring me as her bff? I hardly even know her!{/i}{/cps}"
+    "{cps=40}{i}I don't trust her at all.{/i}{/cps}"
+    "{cps=40}{i}First of all, why does she keep referring to me as her bff? I hardly even know her!{/i}{/cps}"
     "{cps=40}{i}and secondly, How does she know the way back to MY house?{/i}{/cps}"
     "{cps=40}{i}Is it possible that i know her? maybe she's my neighbour or something?{/i}{/cps}"
     "{cps=40}{i}Strange things have been happening ever since ive been walking this neverending road..{/i}{/cps}"
@@ -168,7 +168,7 @@ label start:
 
     
     z "{cps=40}Okay, fine. I'll play you're game, but you WILL show me the way alright?{/cps}"
-    z "{cps=40}Also thank you, but you don't have to walk me back home. {size=-5}that'd just be embarassing..{/size}{/cps}"
+    z "{cps=40}Also thank you, but you don't have to walk me back home. {size=-5}that's kind of embarassing..{/size}{/cps}"
     lg "{cps=40}YEAYAA!!!! You won't regret this!! trust me!~~{/cps}"
     z "{cps=15}I hope so..{/cps}"
     call mash_event
@@ -218,7 +218,7 @@ label after_snowball_fight:
     "..."
     "{cps=15}{i}Huh..{/i}{/cps}"
     "{cps=40}{i}Since when did she get so large? i could've sworn she had the body of a little kid...{/i}{/cps}"
-    "{cps=40}{i}Her hair also seemed longer than before, what's going on?{/i}{/cps}"
+    "{cps=40}{i}Her hair also seems longer than before, what's going on?{/i}{/cps}"
     "{cps=40}{i}I gave a closer look at her, her face was covered by her bangs.{/i}{/cps}"
 
     #wind
@@ -277,7 +277,7 @@ label after_snowball_fight:
     "{cps=30}{i}The school infirmary!{/i}{/cps}"
     "{cps=30}{i}Though that's odd.. what am i doing here?{/i}{/cps}"
     "{cps=30}{i}Especially with this girl.. I don't even know her name!..{/i}{/cps}"
-    c "{cps=30}{i}...{/i}{/cps}"
+    "{cps=30}{i}...But i did see her in my dream just now.{/i}{/cps}"
     c "{cps=30}So are you gonna stay quiet the whole time or what? Aren't you gonna ask me why i woke you up in the first place?{/cps}"
     "{cps=40}{i}Oh right! Seems like a good oppurtunity to ask her...{/cps}"
 
@@ -293,6 +293,7 @@ label after_snowball_fight:
                 z "{cps=40}Oh thank god, i thought you were serious..{/cps}"
                 c "{cps=40}Heh, when have i ever been serious about school?~{/cps}"
                 z "{cps=40}Never?{/cps}"
+                scene infirmary cheeky
                 c "{cps=40} Exactly{/cps}"
                 call question_classmate
 
@@ -316,30 +317,30 @@ label after_snowball_fight:
 
             "Why are we in the infirmary?":
                 scene infirmary thinking
-                n "{cps=40}you forgot THAT too? To think we had such an wholesome moment, forgotten...{/cps}"
+                n "{cps=40}you forgot THAT too? To think we had such an wholesome moment together, forgotten...{/cps}"
+                z "{cps=30}Uhm{/cps}"
                 z "{cps=15}What did we do....{/cps}"
                 n "{cps=40}You came to my rescue when i collapsed and you brought me here!"
-                n "{cps=40}Though i told you to just use my wheelchair and push me, you insisted to..{/cps}"
+                n "{cps=40}Though i told you to just use my wheelchair and push me, but instead, you insisted to..{/cps}"
                 z "{cps=15}Insisted what...{/cps}"
                 scene infirmary cheeky
                 n "{cps=40}To carry me.{/cps}"
                 n "{cps=15}{i}Bridal style{/i}{/cps}"
                 z "{cps=40}Nooo.....{/cps}"
-                "{cps=40}{size=-5}Why oh why did i do something so embarassing.....{/size}{/cps}"
+                "{cps=40}{size=-5}Why did i do something so embarassing.....{/size}{/cps}"
                 call question_classmate
 
 
             "Did you hear me talking in my sleep?":
                 scene infirmary thinking
-                n "{cps=40}...I did hear you{/cps}"
-                z "{cps=40}Did i say something weird? I think i was having nightmare{/cps}"
+                z "{cps=40}Did i say something weird? I think i was having a nightmare{/cps}"
                 z "{cps=40}..and i saw you taunting me in my sleep..{/cps}"
                 z "{cps=40}It was probably when you were trying to wake me up tho, so it might not be that important.. but still.{/cps}"
                 z "{cps=40}It seemed like you wanted to tell me something, like i was being blamed for.. {/cps}"
                 scene infirmary concerned
                 "..."
                 z "{cps=40}Nevermind it's probably nothing...{/cps}"
-                n "{cps=40}Yeah, don't think too much about{/cps}"
+                n "{cps=40}Yeah, don't think too much about it.{/cps}"
                 n "{cps=40}You were giving me the creeps back there, i was almost gonna...{/cps}"
                 scene infirmary thinking
                 n "{cps=40}Nevermind.{/cps}"
@@ -363,16 +364,20 @@ label after_snowball_fight:
         "{cps=30}{i}You both go in a deep sleep, you feel like you've never been this tired before...{/i}{/cps}"
 
         scene horrifying
+        play sound horrifying_noise
         z "{cps=40}Huh.. what's this feeling...{/cps}"
-        z "{cps=40}I've feel like i've felt this way before..{/cps}"
+        z "{cps=40}I feel like i've felt this way before..{/cps}"
         z "{cps=40}When was that again..?{/cps}"
         
-        scene zuha sleepy with fade
+        scene noor sleepy with fade
         z "{cps=40}!!!{/cps}"
         z "{cps=40}What? why am i here... again?{/cps}"
         z "{cps=40}Hey are you there?{/cps}"
         z "{cps=40}Oh no, is she breathing properly?{/cps}"
-        "{cps=40}{i}You try to check her pulse{/i}{/cps}"
+        "{cps=40}{i}You try to check her pulse.{/i}{/cps}"
+        "{cps=30}{i}You can't feel any movement.{/i}{/cps}"
+        z "{cps=30}No way.. is she really?{/cps}"
+        "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
         scene shes awake 
         n "{cps=40}So doc, figured it out yet?{/cps}"
         z "{cps=70}WAH!{/cps}"
@@ -382,8 +387,8 @@ label after_snowball_fight:
         "{cps=30}{i}You try to help her stand up{/i}{/cps}"
         scene standing up
         z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
-        n "{cps=30}{i}...Thankyou{/i}{/cps}"
-        n "{cps=30}{i}A little more and people'll think that we're a pair{/i}{/cps}"
+        n "{cps=30}{i}...Thank you{/i}{/cps}"
+        n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
         z "{cps=30}{i}Be serious..{/i}{/cps}"
 
         "{cps=30}{i}You both look up, and you can't believe what you're seeing{/i}{/cps}"
@@ -413,7 +418,7 @@ label after_snowball_fight:
                     z "!!!"
                     "..."
                     n "{cps=40}So.. did you feel anything{/cps}"
-                    z "{cps=40}I.. only felt the element of surprise, fortunately{/cps}"
+                    z "{cps=40}..Only the element of surprise, fortunately{/cps}"
                     "{cps=20}{i}This girl definetely has a screw loose{/i}{/cps}"
 
 
