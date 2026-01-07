@@ -18,9 +18,19 @@ define lg = Character("???", color="#b84756")
 
 
 # Variables
+# Snowball fight
 default last_mash_time = 0.0
 default goal = 15
 default mash_count = 0
+
+# Dreamland - solved missions
+default swing_solved = false
+default seesaw_solved = false 
+default picknick_table_solved = false 
+
+# Dreamland - inventory 
+default inventory = []
+
 
 # Small shake transform
 transform shake(amount=10):
@@ -49,7 +59,7 @@ screen endless_button_mash():
         If(mash_count + 1 >= goal, [Hide("endless_button_mash"), Jump("mash_success")])
     ]
 
-
+# 
 
     
 # Handy writing tips:
@@ -125,9 +135,9 @@ label start:
     z "{cps=90}Wha-{/cps}"
 
     scene black
-    z "{cps=70}My head, something cold hit my head just now-{/cps}"
+    z "{cps=70}My head, something cold hit my head just n-{/cps}"
 
-    lg "{cps=40}Bullseye! i knew i still got it in me!{/cps}"
+    lg "{cps=40}Bullseye!!{/cps}"
 
     scene dream girl encounter with fade
     play music wind fadein 1.0
@@ -204,6 +214,7 @@ label after_snowball_fight:
 
     scene black
     play sound thud volume 1.9
+    "{cps=40}!{/cps}"
     z "{cps=40}Hey kid are you okay?{/cps}"
     "{cps=40}{i}I ran as fast i could to her, checking if she was alright{/i}{/cps}"
     z "{cps=40}Hey.. are you still there? Im sorry! i should've checked how hard i was throwing!{/cps}"
@@ -391,26 +402,25 @@ label after_snowball_fight:
         n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
         z "{cps=30}{i}Be serious..{/i}{/cps}"
 
-        "{cps=30}{i}You both look up, and you can't believe what you're seeing{/i}{/cps}"
-        scene realising
+        "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
+
+        scene playground with fade
         "{cps=30}{i}This place reminds you of the same place as in your dream{/i}{/cps}"
         "{cps=30}{i}Snowy, trees everywhere, but it seems like youre at a playground.. kind of atleast.{/i}{/cps}"
-        z "{cps=30}This is! This is the same place i saw in my dream earlier!{/cps}"
-        n "{cps=30}Your joking...{/cps}"
-        z "{cps=30}No really! I met this young girl accross the sidewalk, and we were having a snowballfight.{/cps}"
-        z "{cps=30}But then i threw too hard and when i tried to check on her, she transformed into.. you.{/cps}"
+        z "{cps=30}This is! This is the same type of place i saw in my dream earlier!{/cps}"
+        n "{cps=30}...Your joking{/cps}"
         z "{cps=30}Why am i back here again... Why do i have to relive this...{/cps}"
-        z "{cps=30}What has this got to do with you too? why are you here??{/cps}"
-        n "{cps=30}Calm down Zuha, you're overthinking it. If what you saying is true, then doesn't that mean that we're in a dream rightnow?{/cps}"
-        z "{cps=20}Uhm.. i actually don't know, i mean- i cant even remember what we were doing earlie-{/cps}{nw}"
-        n "{cps=30}Look. There has to be a way to conform this theory right?{/cps}"
-        z "{cps=30}I.. guess so..{/cps}"
+        z "{cps=30}What has this got to do with you too, Why are you here??{/cps}"
+        n "{cps=30}Calm down man, you're overthinking it. If what you saying is true, then doesn't that mean that we're in a dream rightnow?{/cps}"
+        z "{cps=20}Hmm.. yeah obviously.{/cps}"
+        n "{cps=30}Look, let's try to confirm if this is a dream, just to be certain.{/cps}"
+        z "{cps=30}I.. guess so.{/cps}"
 
-        label confirm_dream:
-            n "{cps=30}Let's confirm it, if were in a dream or not{/cps}"
+        label confirming_dream:
+            n "{cps=30}Let's confirm it{/cps}"
 
             menu:
-                "Slap me":
+                "Ask her to slap you":
                     z "{cps=30}Look, i know this seems crazy of me to ask, but slap me.{/cps}"
                     z "{cps=30}I believe that if your in a dream, you can't feel pain right?{/cps}"
                     z "{cps=30}I know that this seems crazy, but i want to try out every possibility to figure out if we're in this shared dre-{/cps}{nw}"
@@ -419,7 +429,51 @@ label after_snowball_fight:
                     "..."
                     n "{cps=40}So.. did you feel anything{/cps}"
                     z "{cps=40}..Only the element of surprise, fortunately{/cps}"
-                    "{cps=20}{i}This girl definetely has a screw loose{/i}{/cps}"
+                    "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
+                    jump dream_confirmed
+
+                "Ask her what she remembers":
+                    z "{cps=30}Just to check if we both remember what happened, what can you recall up untill now?{/cps}"
+                    n "{cps=30}I remember waking you up from your earlier nightmare..{/cps}"
+                    z "{cps=30}Yeah..{/cps}"
+                    n "{cps=30}then talking with you for quite a bit..{/cps}"
+                    z "{cps=30}Uh huh..{/cps}"
+                    n "{cps=30}and we both felt sleepy and dozed off!{/cps}"
+                    z "{cps=30}Yeah! I think that's about right!{/cps}"
+                    jump dream_confirmed
+
+        label dream_confirmed:
+            z "{cps=30}Hmm, so we're really in a dream afterall.{/cps}"
+            n "{cps=30}Yeah, now that that's settled, we still have to figure out the \"why\" to this.{/cps}"
+            "{cps=30}{i}You and Noor decide to give a closer look at our surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
+            "{cps=40}{i}There's ordinary playground equipment, such as swings, a seesaw and a picnic table, but you also see things that feel slightly off to be there.{/i}{/cps}"
+            "{cps=40}{i}Things like a safe, cake, and worst of all, a door standing in the middle of nowhere are nearby the area.{/i}{/cps}"
+            "{cps=30}{i}You also see Children that seem to be playing in the playground, well, most of them, some of them are just quiet, like theyre waiting for someone to play with them.{/i}{/cps}"
+
+            n "{cps=40}Hey, i can be wrong, but this place, does it remind you of somewhere you've been before?{/cps}"
+            z "{cps=40}What? no, not really.. this place is just giving me the creeps!{/cps}" 
+            n "{cps=40}Hmm, seems like my theory was incorrect then.{/cps}"
+            z "{cps=40}Huh, what theory?{/cps}"
+            n "{cps=40}...Well, i presume were stuck in your dream right now - because earlier you told me that this dream looked allot like the first dream you had.{/cps}"
+            n "{cps=40}And if that's true - I thought, \"is it possible that we're seeing something from your point of view of something? like a fond memory?\"{/cps}"
+            z "{cps=40}Oh wow, now that i think about it.. that does make sense!{/cps}"
+            z "{cps=40}One thing im certain of, is that this place reminds me allot of the dream i had earlier; same snowy conditions, the same tall dark trees, things like that.{/cps}"
+            z "{cps=40}i was being forced to play with this little girl in my dream, and after i misjudged my strength and tried to check on her she...{/cps}"
+            z "{cps=40}!{/cps}"
+            z "{cps=40}What if - instead of my memories - this place is connected to that girl's memory?{/cps}"
+            z "{cps=40}The fact that children are here, and that were in a playground, makes {i}this{/i} theory more.. well-founded!{/cps}"
+            n "{cps=40}That does seem more likely - good job on figuring it out! Look's like your not entirely useless after all!{/cps}"
+            z "{cps=40}What's that supposed to mean...{/cps}"
+            n "{cps=40}Nevermind that, i think it's a good idea to explore the area, because i don't think that we'll be woken up anytime soon.{/cps}"
+            n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with that kid guarding it.{/cps}"
+            z "{cps=40}Heh, maybe.{/cps}"
+
+            jump exploration_dream_realm
+
+
+        label exploration_dream_realm:
+
+
 
 
 
