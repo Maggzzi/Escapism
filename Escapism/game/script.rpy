@@ -1,43 +1,100 @@
-﻿#Python modules
+﻿#------Python modules------
 init python:
+
+    # Time module imported for: timer in snowball fight
     import time 
 
-#Characters
-# Zuha character defined
-define z = Character("Zuha", color="#6fa758")
+#------Classes------
+
+    #Item class for item objects 
+    class Item:
+        def __init__(self, name, description, icon=None):
+            self.name = name
+            self.description = description
+            self.icon = icon
+
+    #PlaygroundObject class for Playground objects
+    class PlaygroundObject:
+        def __init__(self, name):
+            self.name = name
+            self.stage = 0
 
 
-#??? defined (noor)
-define c = Character("????", color="#ddbf22")
-
-#Noor character defined
-define n = Character("Noor", color="#ddbf22")
-
-#lg (little girl) character defined
-define lg = Character("???", color="#b84756")
-
-
-# Variables
+    
+# ------Variables------
 # Snowball fight
 default last_mash_time = 0.0
 default goal = 15
 default mash_count = 0
 
-# Dreamland - solved missions
-default swing_solved = false
-default seesaw_solved = false 
-default picknick_table_solved = false 
+# Dream realm - solved missions
+default swing_solved = False
+default seesaw_stage = 0 
+default picknick_table_solved = False 
 
-# Dreamland - inventory 
+#------Objects------
+# Dream realm - Items
+define recorder = Item(
+    "Recorder", 
+    "An old recorder given by the swing girl. It recorded a fight between two bullies and the girl you saw in your dream. You also appear shortly in the recording, fighting the bullies and becoming friends with girl from your dream."
+)
+
+define hairpin = Item(
+    "Hairpin", 
+    "A small hairpin given by the seesaw girl. You believe you've bought this hairpin before but you can't recall why."
+)
+
+define cutlery = Item (
+    "Cutlery",
+    "Cutlery, consisting of two forks and knives, given by the seesaw girl. You believe that this item can be usefull"
+)
+
+define photo = Item(
+    "Photo",
+    "A photo celebrating the girl in your dream's and Noor's birthday, founded inside the cake. You see yourself, the dreamgirl, and Noor when you three were kids and based on the picture, you three seemed like great friends."
+)
+
+define friendship_bracelet = Item(
+    "Friendship bracelet",
+    "A friendship bracelet you found in the safe. Your, dreamgirl's and Noor's name are written on it."
+)
+
+define key = Item(
+    "Key",
+    "A key given by The Fortune Teller. You believe that you know where to use it"
+)
+
+define newspaper = Item(
+    "Newspaper",
+    "A Newspaper you found on the ground after witnessing the accident. It describes the unfortunat accident of a nine year old girl happened near a playground."
+)
+
+
+# Dream realm - PlaygroundObjects
+define swing = PlaygroundObject("Swing")     #stage 0: didn't play with swing girl     stage 2: played with swing girl
+define seesaw = PlaygroundObject("Seesaw")     #stage 0: first encounter     stage 1: after playing with swing girl     stage 2: after both girl swing and seesaw play together
+define picnic = PlaygroundObject("Picnic Table")     #stage 0: didn't complete all missions     stage 2: completed first mission     stage 3: completed second mission (all)
+define cake = PlaygroundObject("Cake")     #stage 0: uneaten     stage 1: eaten WITHOUT cutlery (bad ending)    stage 2: eaten WITH cutlery
+define safe = PlaygroundObject("Safe")     #stage 0: locked     stage 1: unlocked
+define fortune_teller = PlaygroundObject(" The Fortune Teller")     #stage 0: quiz failed    stage 2: quiz passed midway     stage 3: quiz passed completely
+define door = PlaygroundObject("Door")     #stage 0: locked     stage 1: unlocked
+define lightswitch PlaygroundObject("Switch")     #stage 0: failed to turn on switch (bad ending)     stage 2: turned on switch
+
+
+
+
+# Dream realm - inventory 
 default inventory = []
 
 
-# Small shake transform
+# ------Small shake transform------
 transform shake(amount=10):
     xoffset -amount
     linear 0.05 xoffset amount
     linear 0.05 xoffset 0
 
+# ------Screens------ : a screen is a UI layer for = buttons, clickable areas, overlays
+# Button smash for snowball fight screen
 screen endless_button_mash():
     modal True
 
@@ -59,7 +116,122 @@ screen endless_button_mash():
         If(mash_count + 1 >= goal, [Hide("endless_button_mash"), Jump("mash_success")])
     ]
 
-# 
+# Interactable objects playground screen
+screen playground():
+    tag exploration      # ensures only one exploration screen exists at a time = if another screen with this tag, this screen closes
+
+    # imagemap = one big image, with clickable regions on top of it
+    imagemap:      
+    ground "playgroud.png"     #normal bg img
+    hover "playgroud_hover.png"   #shows when mouse is above a clickable area
+
+    hotspot (100, 400, 250, 200 action Jump("seesaw_scene"))   #hotspot = invsisible rectangle, if clicked on, jumps to the seesaw_scene label, (used to override normal VN gameplay)
+
+
+# swing_scene dream
+label swing_scene:
+    scene bg swing
+
+    if swing_solved:
+        "The girl is satisfied with your service."
+        jump playground_return
+
+    "You see a girl sitting on the swing, kicking the dirt."
+
+    menu: 
+        "What do i do?":
+            "Play with her":
+                "She smiles as i push her with all my might. "
+                "After a while, she seems happier."
+
+                $ swing_solved = True
+                $ seesaw_stage = 1
+
+                $ inventory.append("Recorder")
+                "The girl hands me a recorder, she lets me listen to it."
+                "Maybe this girl would like to play with the girl at the seesaw."
+                jump playground_return
+
+
+
+
+
+
+# seesaw_scene dream
+label seesaw_scene:
+    # show closeup seesaw after clicking
+    scene bg seesaw
+
+    
+    # Before you play with girl at swings
+    if seesaw_stage == 0: 
+        "The girl wants to play with someone around her age."
+        "She looks bored."
+
+        "Maybe i should come back later..."
+        jump playground_return 
+
+    # After you play with girl at the swings
+    elif seesaw_stage == 1:
+        "The girl rocks the seesaw slowly."
+        
+        menu:
+            "What should i say?":
+                "Ask if she'd like to play with girl a on the seesaw":
+                    "She hesitates... then nods."
+
+                    "Soon, laughter fills the playground."
+    
+                    $ seesaw_stage = 2
+                    $ inventory.append("Hairpin")
+                    $ imventory.append("Cutlery")
+
+                    "She gives me a hairpin and cutlery before running off."
+
+                    jump playground_return
+
+    elif seesaw_stage == 2:
+        "The seesaw creaks quietly."
+        "No one is here anymore."
+        jump playground_return
+
+
+label picnic_scene:
+    scene bg pincic
+
+    if seesaw_stage < 2:
+        # MOET MEER TOEVOEGEN, HEB VOOR NU NIET GEADD!
+        "Theres cake and a safe on the picnic table."
+        "But you won't eat the cake, even if it's your favourite type It;s because you REFUSE to eat cake with you you need a fork {bold}"
+        "I feel like i'm missing something."
+        jump playground_return..
+
+    if seesaw_stage == 2
+    
+
+# ------Characters------
+# Zuha character defined
+define z = Character("Zuha", color="#6fa758")
+
+#??? defined (noor)
+define c = Character("????", color="#ddbf22")
+
+#Noor character defined
+define n = Character("Noor", color="#ddbf22")
+
+#lg (little girl) character defined
+define lg = Character("???", color="#b84756")
+
+
+#seesaw girl
+define r = Character("???", color="#c54040")
+
+#swing girl 
+
+#fortune teller 
+
+
+
 
     
 # Handy writing tips:
@@ -110,7 +282,7 @@ label start:
     z "{cps=35}I could never let that happen, even if it killed me!{/cps}" 
     
     z "{cps=15}..Hahaha{/cps}"  
-    "{cps=5}...........{/cps}"   
+    "{cps=5}......{/cps}"   
     z "{cps=35}Ugh.. its no use{/cps}"
     z "{cps=35}I'm trying so hard to distract myself from these heavy gusts...{/cps}"
     z "{cps=30}and its not even working!{/cps}"
@@ -389,6 +561,7 @@ label after_snowball_fight:
         "{cps=30}{i}You can't feel any movement.{/i}{/cps}"
         z "{cps=30}No way.. is she really?{/cps}"
         "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
+        "{cps=15}...{/cps}"
         scene shes awake 
         n "{cps=40}So doc, figured it out yet?{/cps}"
         z "{cps=70}WAH!{/cps}"
@@ -400,7 +573,7 @@ label after_snowball_fight:
         z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
         n "{cps=30}{i}...Thank you{/i}{/cps}"
         n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
-        z "{cps=30}{i}Be serious..{/i}{/cps}"
+        z "{cps=30}{i}..Be serious{/i}{/cps}"
 
         "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
 
@@ -429,7 +602,7 @@ label after_snowball_fight:
                     "..."
                     n "{cps=40}So.. did you feel anything{/cps}"
                     z "{cps=40}..Only the element of surprise, fortunately{/cps}"
-                    "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
+                    z "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
                     jump dream_confirmed
 
                 "Ask her what she remembers":
@@ -460,18 +633,18 @@ label after_snowball_fight:
             z "{cps=40}One thing im certain of, is that this place reminds me allot of the dream i had earlier; same snowy conditions, the same tall dark trees, things like that.{/cps}"
             z "{cps=40}i was being forced to play with this little girl in my dream, and after i misjudged my strength and tried to check on her she...{/cps}"
             z "{cps=40}!{/cps}"
-            z "{cps=40}What if - instead of my memories - this place is connected to that girl's memory?{/cps}"
+            z "{cps=40}What if - instead of MY memories - this place is connected to that GIRL'S memory?{/cps}"
             z "{cps=40}The fact that children are here, and that were in a playground, makes {i}this{/i} theory more.. well-founded!{/cps}"
             n "{cps=40}That does seem more likely - good job on figuring it out! Look's like your not entirely useless after all!{/cps}"
             z "{cps=40}What's that supposed to mean...{/cps}"
-            n "{cps=40}Nevermind that, i think it's a good idea to explore the area, because i don't think that we'll be woken up anytime soon.{/cps}"
-            n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with that kid guarding it.{/cps}"
-            z "{cps=40}Heh, maybe.{/cps}"
+            n "{cps=40}I think that it's a good idea to explore the area because i don't think that we'll wake up anytime soon.{/cps}"
+            n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with the kid guarding it.{/cps}"
 
             jump exploration_dream_realm
 
 
         label exploration_dream_realm:
+
 
 
 
