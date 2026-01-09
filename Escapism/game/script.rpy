@@ -1,10 +1,54 @@
-﻿#------Python modules------
+﻿# =================
+# CONSTANTS
+# =================
+
+init -1 python:        #init -1 loads before normal init blocks (everything else can safely use these blocks)
+
+    # Swing
+    SWING_NOT_PLAYED = 0
+    SWING_PLAYED = 1
+
+    # Seesaw
+    SEESAW_NOT_PLAYED = 0
+    SEESAW_PLAYED = 1
+    SEESAW_ASK_IF_PLAY_WITH_GIRL_A = 2
+    SEESAW_AFTER_PLAYING = 3
+
+    # Picnic 
+    NO_MISSION_DONE = 0
+    FIRST_MISSION_DONE = 1
+    ALL_MISSION_DONE = 2
+
+    # Cake stages
+    CAKE_UNEATEN = 0
+    CAKE_EATEN_NO_CUTLERY = 1   #bad ending
+    CAKE_EATEN_WITH_CUTLERY = 2
+
+    # Door / Safe
+    LOCKED = 0
+    UNLOCKED = 1
+
+    # Fortune teller
+    FAILED = 0
+    HALFWAY = 1
+    FULLY PASSED = 2
+
+    # Light switch
+    OFF = 0   #bad ending
+    ON = 1
+
+
+# =================
+# PYTHON MODULES
+# =================
 init python:
 
     # Time module imported for: timer in snowball fight
     import time 
 
-#------Classes------
+# =================
+# OOP CLASSES
+# =================
 
     #Item class for item objects 
     class Item:
@@ -19,20 +63,21 @@ init python:
             self.name = name
             self.stage = 0
 
-
     
-# ------Variables------
+# =================
+# VARIABLES
+# =================
+
 # Snowball fight
 default last_mash_time = 0.0
 default goal = 15
 default mash_count = 0
 
-# Dream realm - solved missions
-default swing_solved = False
-default seesaw_stage = 0 
-default picknick_table_solved = False 
 
-#------Objects------
+# =================
+# OBJECTS 
+# =================
+
 # Dream realm - Items
 define recorder = Item(
     "Recorder", 
@@ -71,29 +116,38 @@ define newspaper = Item(
 
 
 # Dream realm - PlaygroundObjects
-define swing = PlaygroundObject("Swing")     #stage 0: didn't play with swing girl     stage 2: played with swing girl
+define swing = PlaygroundObject("Swing")     #stage 0: didn't play with swing girl     stage 1: played with swing girl
 define seesaw = PlaygroundObject("Seesaw")     #stage 0: first encounter     stage 1: after playing with swing girl     stage 2: after both girl swing and seesaw play together
 define picnic = PlaygroundObject("Picnic Table")     #stage 0: didn't complete all missions     stage 2: completed first mission     stage 3: completed second mission (all)
 define cake = PlaygroundObject("Cake")     #stage 0: uneaten     stage 1: eaten WITHOUT cutlery (bad ending)    stage 2: eaten WITH cutlery
 define safe = PlaygroundObject("Safe")     #stage 0: locked     stage 1: unlocked
 define fortune_teller = PlaygroundObject(" The Fortune Teller")     #stage 0: quiz failed    stage 2: quiz passed midway     stage 3: quiz passed completely
 define door = PlaygroundObject("Door")     #stage 0: locked     stage 1: unlocked
-define lightswitch PlaygroundObject("Switch")     #stage 0: failed to turn on switch (bad ending)     stage 2: turned on switch
+define lightswitch = PlaygroundObject("Switch")     #stage 0: failed to turn on switch (bad ending)     stage 2: turned on switch
 
 
+# =================
+# INVENTORY
+# =================
 
-
-# Dream realm - inventory 
 default inventory = []
 
 
-# ------Small shake transform------
+# =================
+# TRANSFORM
+# =================
+
 transform shake(amount=10):
     xoffset -amount
     linear 0.05 xoffset amount
     linear 0.05 xoffset 0
 
-# ------Screens------ : a screen is a UI layer for = buttons, clickable areas, overlays
+
+# =================
+# SCREENS           
+# =================
+# A screen is a UI layer for = buttons, clickable areas, overlays
+
 # Button smash for snowball fight screen
 screen endless_button_mash():
     modal True
@@ -116,23 +170,30 @@ screen endless_button_mash():
         If(mash_count + 1 >= goal, [Hide("endless_button_mash"), Jump("mash_success")])
     ]
 
-# Interactable objects playground screen
+# Playground screen
 screen playground():
-    tag exploration      # ensures only one exploration screen exists at a time = if another screen with this tag, this screen closes
+    tag exploration      # ensures only one exploration screen exists at a time = if another screen with this tag, this current screen closes
 
     # imagemap = one big image, with clickable regions on top of it
     imagemap:      
-    ground "playgroud.png"     #normal bg img
-    hover "playgroud_hover.png"   #shows when mouse is above a clickable area
+        ground "playgroud.png"     #background image
+        hover "playgroud_hover.png"   #same as background, but with subtle highlights over: seesaw, swing, picnic table and door
+        
+        hotspot (100, 400, 250, 200) action Jump("swing_scene")   #hotspot = invsisible rectangle, if clicked on, jumps to the swing_scene label, (used to override normal VN gameplay)
+        hotspot () action Jump("seesaw_scene")
+        hotspot () action Jump("picnic_scene")
+        hotspot () action Jump("door_scene")
 
-    hotspot (100, 400, 250, 200 action Jump("seesaw_scene"))   #hotspot = invsisible rectangle, if clicked on, jumps to the seesaw_scene label, (used to override normal VN gameplay)
 
+# =================
+# LABELS          
+# =================
 
-# swing_scene dream
+# swing_scene dream label
 label swing_scene:
     scene bg swing
 
-    if swing_solved:
+    if swing.stage == 1:
         "The girl is satisfied with your service."
         jump playground_return
 
@@ -144,8 +205,8 @@ label swing_scene:
                 "She smiles as i push her with all my might. "
                 "After a while, she seems happier."
 
-                $ swing_solved = True
-                $ seesaw_stage = 1
+                $ swing_stage = 1
+                $ seesaw_stage = 2
 
                 $ inventory.append("Recorder")
                 "The girl hands me a recorder, she lets me listen to it."
@@ -153,18 +214,15 @@ label swing_scene:
                 jump playground_return
 
 
-
-
-
-
 # seesaw_scene dream
 label seesaw_scene:
     # show closeup seesaw after clicking
     scene bg seesaw
 
-    
-    # Before you play with girl at swings
-    if seesaw_stage == 0: 
+    #AFTER YOU PLAY WITH HER, SEESAW_STAGE IS + 1 
+
+    # After YOU play with girl b at swings
+    if seesaw_stage == 1: 
         "The girl wants to play with someone around her age."
         "She looks bored."
 
@@ -172,7 +230,7 @@ label seesaw_scene:
         jump playground_return 
 
     # After you play with girl at the swings
-    elif seesaw_stage == 1:
+    elif seesaw_stage == 2:
         "The girl rocks the seesaw slowly."
         
         menu:
@@ -182,7 +240,7 @@ label seesaw_scene:
 
                     "Soon, laughter fills the playground."
     
-                    $ seesaw_stage = 2
+                    $ seesaw_stage = 3
                     $ inventory.append("Hairpin")
                     $ imventory.append("Cutlery")
 
@@ -190,7 +248,7 @@ label seesaw_scene:
 
                     jump playground_return
 
-    elif seesaw_stage == 2:
+    elif seesaw_stage == 3:
         "The seesaw creaks quietly."
         "No one is here anymore."
         jump playground_return
@@ -206,10 +264,14 @@ label picnic_scene:
         "I feel like i'm missing something."
         jump playground_return..
 
-    if seesaw_stage == 2
+   
     
 
-# ------Characters------
+# =================
+# CHARACTERS           
+# =================
+
+# Important characters 
 # Zuha character defined
 define z = Character("Zuha", color="#6fa758")
 
@@ -223,12 +285,17 @@ define n = Character("Noor", color="#ddbf22")
 define lg = Character("???", color="#b84756")
 
 
+# NPC's 
 #seesaw girl
 define r = Character("???", color="#c54040")
 
 #swing girl 
 
 #fortune teller 
+
+#bully 1
+
+#bully 2
 
 
 
