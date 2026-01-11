@@ -2,7 +2,7 @@
 # CONSTANTS
 # =================
 
-init -1 python:        #init -1 loads before normal init blocks (everything else can safely use these blocks)
+init -1 python:        #init -1 loads before normal init blocks
 
     # Swing
     SWING_NOT_PLAYED = 0
@@ -17,12 +17,16 @@ init -1 python:        #init -1 loads before normal init blocks (everything else
     # Picnic 
     NO_MISSION_DONE = 0
     FIRST_MISSION_DONE = 1
-    ALL_MISSION_DONE = 2
+    ALL_MISSIONS_DONE = 2
 
     # Cake stages
     CAKE_UNEATEN = 0
-    CAKE_EATEN_NO_CUTLERY = 1   #bad ending
+    CAKE_EATEN_NO_CUTLERY = 1   #short bad ending
     CAKE_EATEN_WITH_CUTLERY = 2
+
+    #Are we still friends? turning point for a good or bad ending
+    NOT_FRIENDS = 0
+    STILL_FRIENDS = 1
 
     # Door / Safe
     LOCKED = 0
@@ -30,11 +34,11 @@ init -1 python:        #init -1 loads before normal init blocks (everything else
 
     # Fortune teller
     FAILED = 0
-    HALFWAY = 1
-    FULLY PASSED = 2
+    HALFWAY_PASSED = 1
+    FULLY_PASSED = 2
 
     # Light switch
-    OFF = 0   #bad ending
+    OFF = 0   #bshort bad ending
     ON = 1
 
 
@@ -179,7 +183,7 @@ screen playground():
         ground "playgroud.png"     #background image
         hover "playgroud_hover.png"   #same as background, but with subtle highlights over: seesaw, swing, picnic table and door
         
-        hotspot (100, 400, 250, 200) action Jump("swing_scene")   #hotspot = invsisible rectangle, if clicked on, jumps to the swing_scene label, (used to override normal VN gameplay)
+        hotspot (100, 400, 250, 200) action Jump("swing_scene")   #hotspot = invisible rectangle, if clicked on, jumps to the swing_scene label, (used to override normal VN gameplay)
         hotspot () action Jump("seesaw_scene")
         hotspot () action Jump("picnic_scene")
         hotspot () action Jump("door_scene")
@@ -194,7 +198,7 @@ label swing_scene:
     scene bg swing
 
     if swing.stage == 1:
-        "The girl is satisfied with your service."
+        "The girl is satisfied Pplaying with you."
         jump playground_return
 
     "You see a girl sitting on the swing, kicking the dirt."
@@ -205,8 +209,8 @@ label swing_scene:
                 "She smiles as i push her with all my might. "
                 "After a while, she seems happier."
 
-                $ swing_stage = 1
-                $ seesaw_stage = 2
+                swing.stage = 1
+                seesaw.stage = 2
 
                 $ inventory.append("Recorder")
                 "The girl hands me a recorder, she lets me listen to it."
@@ -220,9 +224,47 @@ label seesaw_scene:
     scene bg seesaw
 
     #AFTER YOU PLAY WITH HER, SEESAW_STAGE IS + 1 
+    if seesaw.stage == SEESAW_NOT_PLAYED:
+        "You see a little girl sitting on the ground with her back laying on one end of the seesaw."
+        "You and Noor notice the sad and hollow looking expression on the the girl's face,. You get an idea to try and cheer her up"
+
+        n "Hello there young girl! Mind telling me what's got you so lost in thought?"
+        h "Uhm.. who are you.. two?"
+        n "My name is Noor and this girl's name is Zoo!"
+        z "...It's Zuha"
+        n "In any case, we wanted to ask if everything's alright, you look like your gonna bore a hole in the ground just by staring there for too long."
+        z "Noor... why can't you show concern like a normal person."
+        h "wha- no.. it's just that... i..."
+        n "mhm?"
+        h "...I really want to play on the seesaw, but theres nobody here to play with."
+        h "The only kid playing in the park is that girl over there, on the swing, but i don't think i should bother her..."
+        z "So.. you just want someone to play with? What's your name dear?"
+        h "yes... my name is Ha-eun."
+        z "Ha-eun, i'd love to play with you if it helps cheer you up!"
+        h "A-are you sure? don't you think that-"
+        z "It's no big deal, don't worry! I used to love the seesaw too when i was your age, so i'm really doing this for the both of us!"
+        h "Oh, okay..!"
+
+        "The girl gets seated immediatly, waiting for you to also sit down on the other end."
+        "The moment you put your full weight onto the seat, Ha-eun is lifted high into the air on her end of the seesaw, now dangling from that height - she looks down at you from above."
+        "While your still below her, you get confused at first, processing what happened so suddenly, and it finally hits you."
+        z "Ah..."
+        "{i}You now realize what Ha-eun was trying to say.{/i}"
+        n "NO way.. *snort*"
+        n "BAHHWHAHHAAHAHAAH"
+        z "You get flushed, realising you might be {i}too{/i} heavy to play on the seesaw afterall...theres a reason why they're made for {u}kids{/u} only."
+        h "Uhmm miss, im feeling scared, im too high up!"
+        z "O-oh yeah! im sorry, let me get you down!"
+        "You stand up, bringing Ha-eun down - You notice she's in a much worser mood than before."
+        h "Ugh.. now i'll never be able to play on the seesaw..."
+        h "But still - thank you for trying miss, but i wish there was someone my age who could play with me.."
+        z "Hmm, i think i know what i should do."
+        n "... I have a bad feeling i know where this is going."
+
+        $ seesaw.stage = 1 
 
     # After YOU play with girl b at swings
-    if seesaw_stage == 1: 
+    if seesaw.stage == SEESAW_PLAYED: 
         "The girl wants to play with someone around her age."
         "She looks bored."
 
@@ -230,23 +272,47 @@ label seesaw_scene:
         jump playground_return 
 
     # After you play with girl at the swings
-    elif seesaw_stage == 2:
-        "The girl rocks the seesaw slowly."
+    elif seesaw_stage == SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
+        "The girl sits on the ground, beside the seesaw."
         
         menu:
             "What should i say?":
                 "Ask if she'd like to play with girl a on the seesaw":
-                    "She hesitates... then nods."
-
-                    "Soon, laughter fills the playground."
+                    h "Huh? oh no - why did you ask her? i don't know her that well.."
+                    z "You didn't know me and Noor before too, but we still got along pretty well didnt we? Try to give them a chance, i think anyone'll like the company of a girl like you!"
+                    "Ha-eun gets flustered and hesitates a little but accepts your request."
+                    "Girl a appears from behind you and introduces herself to her"
+                    "Ha-eun replies and does the same, they begin to have a chat and sit on the seesaw"
+                    "The both of them were having a great time together while rocking the seesaw. Soon, laughter fills the playground."
     
                     $ seesaw_stage = 3
-                    $ inventory.append("Hairpin")
-                    $ imventory.append("Cutlery")
+                    $ inventory.append(hairpin)
+                    $ imventory.append(cutlery)
 
-                    "She gives me a hairpin and cutlery before running off."
-
+                    "Ha-eun seems satisfied after all that playing and rushes over to you."
+                    h "Miss Zuha, thank you for encouraging me to give girl a a chance, i had a wonderfull time with her!"
+                    h "To express my gratitude, i'd like to give you something that may come handy to you in the future"
+                    "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you knew it, she vanished with girl a."
+                    n "Soo... not only this place, but the items we keep getting are very questionable huh"
+                    n "I mean, who in their right mind would just give us these forks and knives, along side a-"
+                    n "..."
+                    n "Hairpin..."
+                    "The both of you inspect the hairpin, trying to examine every small detail given to it."
+                    z "{cps=40} Wait a minute - i feel like i've seen this hairpin befo-{nw}{/cps}"
+                    n "This hairpin! i remember somebody wearing this all the time!"
+                    z "...As i was saying."
+                    z "The hairpin feels strangely nostalgic. i don't know why, but i think ive seen one like this for sale in a clothing store before..." 
+                    z "Is this.. maybe my hairpin?"
+                    n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a 17 year old like yourself."
                     jump playground_return
+
+                "Ask if she'd like to play with Inaya on the seesaw":
+                    n "Wow.. making big decisions all on your own huh?"
+                    n "How about asking the person involved first before telling her what to do?"
+                    "I'm still not gonna play with her even if you ask nicely - don't wanne be in your place like last time."
+
+                    jump seesaw_scene
+                
 
     elif seesaw_stage == 3:
         "The seesaw creaks quietly."
@@ -287,10 +353,10 @@ define lg = Character("???", color="#b84756")
 
 # NPC's 
 #seesaw girl
-define r = Character("???", color="#c54040")
+define s = Character("???", color="#40c5c5")
 
 #swing girl 
-
+define h = Character("???", color="#c54040")
 #fortune teller 
 
 #bully 1
