@@ -1,4 +1,35 @@
 ﻿# =================
+# CHARACTERS           
+# =================
+
+# Important characters 
+# Zuha character defined
+define z = Character("Zuha", color="#6fa758")
+
+#??? defined (noor)
+define c = Character("????", color="#ddbf22")
+
+#Noor character defined
+define n = Character("Noor", color="#ddbf22")
+
+#lg (little girl) character defined
+define lg = Character("???", color="#b84756")
+
+
+# NPC's 
+#seesaw girl
+define s = Character("???", color="#40c5c5")
+
+#swing girl 
+define h = Character("???", color="#c54040")
+#fortune teller 
+
+#bully 1
+
+#bully 2
+
+
+# =================
 # CONSTANTS
 # =================
 
@@ -7,6 +38,7 @@ init -1 python:        #init -1 loads before normal init blocks
     # Swing
     SWING_NOT_PLAYED = 0
     SWING_PLAYED = 1
+    SWING_PLAYED_NOW_PLAYING_WITH_HAEUN = 2
 
     # Seesaw
     SEESAW_NOT_PLAYED = 0
@@ -33,14 +65,14 @@ init -1 python:        #init -1 loads before normal init blocks
     UNLOCKED = 1
 
     # Fortune teller
-    FAILED = 0
-    HALFWAY_PASSED = 1
-    FULLY_PASSED = 2
+    STARTING = 0
+    FAILED = 1
+    HALFWAY_PASSED = 2
+    FULLY_PASSED = 3
 
     # Light switch
     OFF = 0   #bshort bad ending
     ON = 1
-
 
 # =================
 # PYTHON MODULES
@@ -63,20 +95,41 @@ init python:
 
     #PlaygroundObject class for Playground objects
     class PlaygroundObject:
-        def __init__(self, name):
+        def __init__(self, name, stage):
             self.name = name
-            self.stage = 0
+            self.stage = stage
 
-    
 # =================
 # VARIABLES
 # =================
 
-# Snowball fight
-default last_mash_time = 0.0
-default goal = 15
-default mash_count = 0
 
+
+# Playground hotspot positions (fallback values)
+default swing_x = 1050
+default swing_y = 280
+default swing_w = 160
+default swing_h = 120
+
+default seesaw_x = 800
+default seesaw_y = 280
+default seesaw_w = 160
+default seesaw_h = 120
+
+default picnic_x = 500
+default picnic_y = 280
+default picnic_w = 160
+default picnic_h = 120
+
+default cake_x = 400
+default cake_y = 300
+default cake_w = 120
+default cake_h = 120
+
+default safe_x = 600
+default safe_y = 300
+default safe_w = 120
+default safe_h = 120
 
 # =================
 # OBJECTS 
@@ -120,14 +173,14 @@ define newspaper = Item(
 
 
 # Dream realm - PlaygroundObjects
-define swing = PlaygroundObject("Swing")     #stage 0: didn't play with swing girl     stage 1: played with swing girl
-define seesaw = PlaygroundObject("Seesaw")     #stage 0: first encounter     stage 1: after playing with swing girl     stage 2: after both girl swing and seesaw play together
-define picnic = PlaygroundObject("Picnic Table")     #stage 0: didn't complete all missions     stage 2: completed first mission     stage 3: completed second mission (all)
-define cake = PlaygroundObject("Cake")     #stage 0: uneaten     stage 1: eaten WITHOUT cutlery (bad ending)    stage 2: eaten WITH cutlery
-define safe = PlaygroundObject("Safe")     #stage 0: locked     stage 1: unlocked
-define fortune_teller = PlaygroundObject(" The Fortune Teller")     #stage 0: quiz failed    stage 2: quiz passed midway     stage 3: quiz passed completely
-define door = PlaygroundObject("Door")     #stage 0: locked     stage 1: unlocked
-define lightswitch = PlaygroundObject("Switch")     #stage 0: failed to turn on switch (bad ending)     stage 2: turned on switch
+define swing = PlaygroundObject("Swing", SWING_NOT_PLAYED)     #stage 0: didn't play with swing girl     stage 1: played with swing girl
+define seesaw = PlaygroundObject("Seesaw", SEESAW_NOT_PLAYED)     #stage 0: first encounter     stage 1: after playing with swing girl     stage 2: after both girl swing and seesaw play together
+define picnic = PlaygroundObject("Picnic Table", NO_MISSION_DONE)     #stage 0: didn't complete all missions     stage 2: completed first mission     stage 3: completed second mission (all)
+define cake = PlaygroundObject("Cake", CAKE_UNEATEN)     #stage 0: uneaten     stage 1: eaten WITHOUT cutlery (bad ending)    stage 2: eaten WITH cutlery
+define safe = PlaygroundObject("Safe", LOCKED)     #stage 0: locked     stage 1: unlocked
+define fortune_teller = PlaygroundObject(" The Fortune Teller", STARTING)     #stage 0: quiz failed    stage 2: quiz passed midway     stage 3: quiz passed completely
+define door = PlaygroundObject("Door", LOCKED)     #stage 0: locked     stage 1: unlocked
+define lightswitch = PlaygroundObject("Switch", OFF)     #stage 0: failed to turn on switch (bad ending)     stage 2: turned on switch
 
 
 # =================
@@ -135,6 +188,7 @@ define lightswitch = PlaygroundObject("Switch")     #stage 0: failed to turn on 
 # =================
 
 default inventory = []
+
 
 
 # =================
@@ -152,20 +206,44 @@ transform shake(amount=10):
 # =================
 # A screen is a UI layer for = buttons, clickable areas, overlays
 
-# Button smash for snowball fight screen
-screen endless_button_mash():
+# Button smash for Snowball fight screen
+screen mash_snowballfight():
     modal True
 
     # Background that shakes
     add "snowball fight" at shake(amount=5 if mash_count % 2 == 0 else -5)
 
     # Key prompt
-    text "PRESS Q!" xpos 0.5 ypos 0.5 xanchor 0.5 size 50 bold True color "#ffffff"
+    text "PRESS Q!" xpos 0.5 ypos 0.5 xanchor 0.5 size 50 bold True color "#334082"
+
+    # Encouragement message with a timer
+    timer 1.0 action Function(lambda: None) repeat True  # redraw screen every second
+    if time.time() - last_mash_time > 5.0:
+        text "Keep it up!" xpos 0.5 ypos 0.3 xanchor 0.5 color "#632727" size 40
+
+    # Key press handling
+    key "K_q" action [
+        SetVariable("last_mash_time", time.time()),      # update timer
+        SetVariable("mash_count", mash_count + 1),       # increment count
+        If(mash_count + 1 >= goal, [
+            Hide("mash_snowballfight"), 
+            Jump("mash_success")])
+    ]
+
+# Button smash for Swing pushing screen
+screen endless_button_mash_swing():
+    modal True
+
+    # Background that shakes
+    add "swing_scene" at shake(amount=5 if mash_count % 2 == 0 else -5)
+
+    # Key prompt
+    text "PRESS Q!" xpos 0.5 ypos 0.5 xanchor 0.5 size 50 bold True color "#823333"
 
     # Encouragement message with a timer
     timer 1.0 action Function(lambda: None) repeat True  # redraw screen every second
     if time.time() - last_mash_time > 15.0:
-        text "Don't give up!" xpos 0.5 ypos 0.3 xanchor 0.5 color "#ff0000" size 40
+        text "Keep it up!" xpos 0.5 ypos 0.3 xanchor 0.5 color "#ff0000" size 40
 
     # Key press handling
     key "K_q" action [
@@ -174,54 +252,236 @@ screen endless_button_mash():
         If(mash_count + 1 >= goal, [Hide("endless_button_mash"), Jump("mash_success")])
     ]
 
-# Playground screen
-screen playground():
-    tag exploration      # ensures only one exploration screen exists at a time = if another screen with this tag, this current screen closes
+screen playground:
 
-    # imagemap = one big image, with clickable regions on top of it
-    imagemap:      
-        ground "playgroud.png"     #background image
-        hover "playgroud_hover.png"   #same as background, but with subtle highlights over: seesaw, swing, picnic table and door
-        
-        hotspot (100, 400, 250, 200) action Jump("swing_scene")   #hotspot = invisible rectangle, if clicked on, jumps to the swing_scene label, (used to override normal VN gameplay)
-        hotspot () action Jump("seesaw_scene")
-        hotspot () action Jump("picnic_scene")
-        hotspot () action Jump("door_scene")
+    imagemap:
+        ground "playground.png"
 
+        # Swing hotspot
+        hotspot (swing_x, swing_y, swing_w, swing_h):
+            action [Hide("debug_hitbox_swing"), Jump("swing_scene")]
+
+        # Seesaw hotspot
+        hotspot (seesaw_x, seesaw_y, seesaw_w, seesaw_h):
+            hovered Show("debug_hitbox_seesaw")
+            unhovered Hide("debug_hitbox_seesaw")
+            action Jump("seesaw_scene")
+
+        # Picnic hotspot
+        hotspot (picnic_x, picnic_y, picnic_w, picnic_h):
+            hovered Show("debug_hitbox_picnic")
+            unhovered Hide("debug_hitbox_picnic")
+            action Jump("picnic_scene")
+
+
+screen debug_hitbox_swing:
+    add Solid("#00ff0088") xpos swing_x ypos swing_y xsize swing_w ysize swing_h
+
+screen debug_hitbox_seesaw:
+    add Solid("#0000ff88") xpos seesaw_x ypos seesaw_y xsize seesaw_w ysize seesaw_h
+
+screen debug_hitbox_picnic:
+    add Solid("#ffff0088") xpos picnic_x ypos picnic_y xsize picnic_w ysize picnic_h
+
+
+
+screen inventory_screen():
+    tag menu
+
+    frame:
+        align (0.5, 0.5)
+        padding (20, 20)
+
+        vbox: 
+            spacing 10
+
+            text "Inventory"
+
+            if inventory:
+                for item in inventory:
+                    text item.name
+            else:
+                text "Your inventory is empty."
+
+            textbutton "Close" action Return()
 
 # =================
 # LABELS          
 # =================
 
+# mashing event (for snowballfight)
+label mash_event_snowballfight:
+
+    # Reset variables before starting
+    $ mash_count = 0
+    $ last_mash_time = time.time()
+
+    # Show mash screen
+    show screen mash_snowballfight
+    # Wait until the screen signals the event is done
+    $ renpy.pause()
+
+    return
+
+
+label mash_success:
+    jump after_snowball_fight
+
+# mashing event (for swinging scene)
+label mash_event_swing:
+    scene black  # or your starting scene
+
+    # Reset variables
+    $ mash_count = 0
+    $ last_mash_time = time.time()
+
+    show screen endless_button_mash_swing
+    # Waiting until screen handles progression
+    $ renpy.pause(3600.0, hard=True)
+
+    return
+
+
+label playground_hub:
+    # Move swing a bit left
+    $ swing_x = 1080
+    $ swing_y = 280
+
+    # Move seesaw a bit higher
+    $ seesaw_x = 633
+    $ seesaw_y = 450
+
+    # Move picnic table
+    $ picnic_x = 138
+    $ picnic_y = 525
+
+
+    call screen playground
+    return
+
+
 # swing_scene dream label
 label swing_scene:
-    scene bg swing
+    scene swing_scene
 
-    if swing.stage == 1:
-        "The girl is satisfied Pplaying with you."
-        jump playground_return
+    if swing.stage == SWING_NOT_PLAYED:
+        "As you approach the swing, a young girl is swinging by herself. She looks up as you draw near."
+        s "Hey there! you, with the dark hair!"
+        z "Huh, me?"
+        "Thinking that he called you over, you walk towards her."
+        s "Say... can you do me a favor? I promise it'll be of your benefit if you wanna know something {i}juicy{/i}."
+        s "The thing is, i know a secret that you don't know!~ and i'll only tell you if you push me while I'm on the swing!"
+        n "What are you blabbering about? Don't think that Zuha will give her swing pushing services, cash-free!"
+        z "My what."
+        s "I promise it'll be worth it! i've heard that in this specific area, something hectic happened... an incident if you will"
+        s "And because of that incident, no one else dares to play around here anymore."
+        s "Well, except for me- because i don't get scared that easily."
+        z "So what happened exactly?"
+        s "That i will tell!- but only for the price of 1 minute continual pushes while i sit on the swing!"
+        n "Well Zuha, that's how far my negotiating skills can go, i guess you'll have to give your swing pushing services for free this time."
+        z "Why does this situation feel so similair..."
+        z "*sigh*... okay, i'll do it."
+        s "I knew you had it in you!"
+        n "I knew that i could count on you!"
+        z "..."
 
-    "You see a girl sitting on the swing, kicking the dirt."
+        scene black
+        call mash_event_swing
+        
+        $ swing.stage = SWING_PLAYED 
+        s "Whoo! that was fun!!!"
+        scene swing_scene
+        z "Im.. happy you enjoyed it ....uhh"
+        z "What's your name kid?"
+        s "The name's Seo-ah!"
+        n "Now Seo-ah, explain to us the what happened here."
+        s "Okay, but i won't tell you- here!"
+        "Seo-ah gives you an old recorder, it seems cracked from the outside and a little rusty."
+        z "Why are you giving me this?"
+        s "Well the thing is that i heard about the incident from this old recorder, it kept replaying the same thing over and over again."
+        s "I thought, why tell them when they can hear the real thing?"
+        z "{cps=40}Ah, but i don't really know what button to pre-{nw}{/cps}"
+        s "Ill do it for you!~"
+        "click"
 
-    menu: 
-        "What do i do?":
+        "You hear the sound glitching at first, but it got slightly clearer. You and Noor both listen to the recording."
+        "{size=-5}Get up!{/size} i said GET UP!"
+        "kicking sound"
+        "No! stop it!"
+        "Why are you being so stubborn, people like me also want a turn on the swing!"
+        "But i just got here! It hasn't even been 3 minutes!"
+        "I mean sure, if you were {i}normal{/i}, i wouldve understand, but your a \"special case\". How are you even gonna push yourself with {i}those{i} legs?"
+        "People like you shouldn't wait in line for something that isn't made for special cases to begin with!"
+        "slap sound"
+        "What the hell are you going on about- don't you dare lay a finger on her!"
+        "...Hahaha"
+        "Ohh i get it, YOUR gonna push her! because she obiously can't do it herself huh?"
+        "Get out of my sigth before i'll tell the teacher on you. You don't know anything about her!"
+        "Theres nothing more to know about her, just the label \"cripple\" is about enough to sum her up!"
+        "!"
+        "fighting/kicking noises"
+        "You hear a dispute, judging by the audio, it seems like the bully and a girl standing up for the disabled girl are fighting eachother."
+        "When suddenly, you hear someone running with full speed"
+        "loud kicking noise"
+        "!!!"
+        "Ow!! Ow my face- who the heck are you!"
+        "..."
+        "I saw the whole thing go down. Are you that pathetic? Insulting a little girl, slapping her - just to sit on some measily swing?"
+        "It's the other way around, people like YOU are the \"special cases's\", resorting to violence over one petty thing."
+        "Worst of all, you chose her to be your puncing bag BECAUSE she's so called special, going after people weaker than you, tch- go for someone your own size."
+        "!.. I- You-! Just wait 'till i get the teacher and my parents, they'll get you expelled!"
+        "Running away noise"
+        "{i}Hmmph, NOW she'll tell the teacher? she's the one who started it...{/i}"
+        "Uhm.. excuse me?"
+        "!!!"
+        "Thank you for that, i thought she was gonna harass us again and go away after having the last word, but i guess i flipped her switch."
+        "You shouldn't thank me, it just felt too unbearable - to just watch this all unfold. I had to do something!"
+        "I'll tell the teacher immediatly about what happened, i hope you really don't get expelled over this.."
+        "You really think im gonna get expelled? That girl was just bluffing, and even if she's not, ive got quite allot to say aswell."
+        "Besides, my clean record and high grades make me a pretty hard student to expel."
+        "Heheh, thanks nonetheless, what's your name by the way?"
+        "... It's Zuha, what's your name?"
+        "Oh, my name is %?!38*$-"
+        "The rusty recorder crashes, hearing glitching noises and eventually, going quiet."
+
+        z "That, was me? and the girl i saw in my dream, i recognize her voice!"
+        s "Whuh? your the kid that beat that her up?? {size=-5}you don't exactly look the part..{/size}"
+        n "......."
+        n "No way... it's he-" 
+        z "What do you think Noor, you recognize someone in here too"
+        n "!"
+        n "N-no, not the slightest clue.."
+        "Huh, it felt like she was almost gonna tell me though.. well whatever"
+        z "L-lets go explore the playground further, thanks for showing us this Seo-ah!"
+        s "No problem, don't miss me too much now!"
+        n "Heh, we won't!~"
+
+        jump playground_hub
+
+    elif swing.stage == SWING_PLAYED:
+        "The girl is satisfied playing with you."
+        jump playground_hub
+
+        "What do i do?"
+
+        menu:
             "Play with her":
-                "She smiles as i push her with all my might. "
+                "She smiles as i push her with all my might."
                 "After a while, she seems happier."
 
-                swing.stage = 1
-                seesaw.stage = 2
+                $ swing.stage = 1
+                $ seesaw.stage = 2
 
-                $ inventory.append("Recorder")
+                $ inventory.append(recorder)
                 "The girl hands me a recorder, she lets me listen to it."
                 "Maybe this girl would like to play with the girl at the seesaw."
-                jump playground_return
+                jump playground_hub
 
 
 # seesaw_scene dream
 label seesaw_scene:
     # show closeup seesaw after clicking
-    scene bg seesaw
+    scene seesaw_scene
 
     #AFTER YOU PLAY WITH HER, SEESAW_STAGE IS + 1 
     if seesaw.stage == SEESAW_NOT_PLAYED:
@@ -247,7 +507,7 @@ label seesaw_scene:
 
         "The girl gets seated immediatly, waiting for you to also sit down on the other end."
         "The moment you put your full weight onto the seat, Ha-eun is lifted high into the air on her end of the seesaw, now dangling from that height - she looks down at you from above."
-        "While your still below her, you get confused at first, processing what happened so suddenly, and it finally hits you."
+        "While your still below her, you get confused why your still below her, processing what happened so suddenly, and it finally hits you."
         z "Ah..."
         "{i}You now realize what Ha-eun was trying to say.{/i}"
         n "NO way.. *snort*"
@@ -262,106 +522,72 @@ label seesaw_scene:
         n "... I have a bad feeling i know where this is going."
 
         $ seesaw.stage = 1 
+        jump playground_hub
 
     # After YOU play with girl b at swings
-    if seesaw.stage == SEESAW_PLAYED: 
+    elif seesaw.stage == SEESAW_PLAYED: 
         "The girl wants to play with someone around her age."
         "She looks bored."
 
         "Maybe i should come back later..."
-        jump playground_return 
+        jump playground_hub 
 
     # After you play with girl at the swings
-    elif seesaw_stage == SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
-        "The girl sits on the ground, beside the seesaw."
         
+        "What should i say?"
         menu:
-            "What should i say?":
-                "Ask if she'd like to play with girl a on the seesaw":
-                    h "Huh? oh no - why did you ask her? i don't know her that well.."
-                    z "You didn't know me and Noor before too, but we still got along pretty well didnt we? Try to give them a chance, i think anyone'll like the company of a girl like you!"
-                    "Ha-eun gets flustered and hesitates a little but accepts your request."
-                    "Girl a appears from behind you and introduces herself to her"
-                    "Ha-eun replies and does the same, they begin to have a chat and sit on the seesaw"
-                    "The both of them were having a great time together while rocking the seesaw. Soon, laughter fills the playground."
-    
-                    $ seesaw_stage = 3
-                    $ inventory.append(hairpin)
-                    $ imventory.append(cutlery)
+            "Ask if she'd like to play with girl a on the seesaw":
+                h "Huh? oh no - why did you ask her? i don't know her that well.."
+                z "You didn't know me and Noor before too, but we still got along pretty well didnt we? Try to give them a chance, i think anyone'll like the company of a girl like you!"
+                "Ha-eun gets flustered and hesitates a little but accepts your request."
+                "Girl a appears from behind you and introduces herself to her"
+                "Ha-eun replies and does the same, they begin to have a chat and sit on the seesaw"
+                "The both of them were having a great time together while rocking the seesaw. Soon, laughter fills the playground."
 
-                    "Ha-eun seems satisfied after all that playing and rushes over to you."
-                    h "Miss Zuha, thank you for encouraging me to give girl a a chance, i had a wonderfull time with her!"
-                    h "To express my gratitude, i'd like to give you something that may come handy to you in the future"
-                    "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you knew it, she vanished with girl a."
-                    n "Soo... not only this place, but the items we keep getting are very questionable huh"
-                    n "I mean, who in their right mind would just give us these forks and knives, along side a-"
-                    n "..."
-                    n "Hairpin..."
-                    "The both of you inspect the hairpin, trying to examine every small detail given to it."
-                    z "{cps=40} Wait a minute - i feel like i've seen this hairpin befo-{nw}{/cps}"
-                    n "This hairpin! i remember somebody wearing this all the time!"
-                    z "...As i was saying."
-                    z "The hairpin feels strangely nostalgic. i don't know why, but i think ive seen one like this for sale in a clothing store before..." 
-                    z "Is this.. maybe my hairpin?"
-                    n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a 17 year old like yourself."
-                    jump playground_return
+                $ seesaw.stage = 3
+                $ inventory.append(hairpin)
+                $ inventory.append(cutlery)
 
-                "Ask if she'd like to play with Inaya on the seesaw":
-                    n "Wow.. making big decisions all on your own huh?"
-                    n "How about asking the person involved first before telling her what to do?"
-                    "I'm still not gonna play with her even if you ask nicely - don't wanne be in your place like last time."
+                "Ha-eun seems satisfied after all that playing and rushes over to you."
+                h "Miss Zuha, thank you for encouraging me to give girl a a chance, i had a wonderfull time with her!"
+                h "To express my gratitude, i'd like to give you something that may come handy to you in the future"
+                "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you knew it, she vanished with girl a."
+                n "Soo... not only this place, but the items we keep getting are very questionable huh"
+                n "I mean, who in their right mind would just give us these forks and knives, along side a-"
+                n "..."
+                n "Hairpin..."
+                "The both of you inspect the hairpin, trying to examine every small detail given to it."
+                z "{cps=40} Wait a minute - i feel like i've seen this hairpin befo-{nw}{/cps}"
+                n "This hairpin! i remember somebody wearing this all the time!"
+                z "...As i was saying."
+                z "The hairpin feels strangely nostalgic. i don't know why, but i think ive seen one like this for sale in a clothing store before..." 
+                z "Is this.. maybe my hairpin?"
+                n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a 17 year old like yourself."
+                jump playground_return
 
-                    jump seesaw_scene
+            "Ask if she'd like to play with Inaya on the seesaw":
+                n "Wow.. making big decisions all on your own huh?"
+                n "How about asking the person involved first before telling her what to do?"
+                "I'm still not gonna play with her even if you ask nicely - don't wanne be in your place like last time."
+
+                jump seesaw_scene
                 
 
-    elif seesaw_stage == 3:
+    elif seesaw.stage == SEESAW_AFTER_PLAYING:
+    
         "The seesaw creaks quietly."
         "No one is here anymore."
-        jump playground_return
+        #jump playground_return
 
-
-label picnic_scene:
+    label picnic_scene:
     scene bg pincic
 
-    if seesaw_stage < 2:
+    if seesaw.stage < 2:
         # MOET MEER TOEVOEGEN, HEB VOOR NU NIET GEADD!
         "Theres cake and a safe on the picnic table."
         "But you won't eat the cake, even if it's your favourite type It;s because you REFUSE to eat cake with you you need a fork {bold}"
         "I feel like i'm missing something."
-        jump playground_return..
-
-   
-    
-
-# =================
-# CHARACTERS           
-# =================
-
-# Important characters 
-# Zuha character defined
-define z = Character("Zuha", color="#6fa758")
-
-#??? defined (noor)
-define c = Character("????", color="#ddbf22")
-
-#Noor character defined
-define n = Character("Noor", color="#ddbf22")
-
-#lg (little girl) character defined
-define lg = Character("???", color="#b84756")
-
-
-# NPC's 
-#seesaw girl
-define s = Character("???", color="#40c5c5")
-
-#swing girl 
-define h = Character("???", color="#c54040")
-#fortune teller 
-
-#bully 1
-
-#bully 2
+        #jump playground_return
 
 
 
@@ -486,37 +712,18 @@ label start:
     z "{cps=40}Also thank you, but you don't have to walk me back home. {size=-5}that's kind of embarassing..{/size}{/cps}"
     lg "{cps=40}YEAYAA!!!! You won't regret this!! trust me!~~{/cps}"
     z "{cps=15}I hope so..{/cps}"
-    call mash_event
+    
+    call mash_event_snowballfight
     jump after_snowball_fight
 
-label mash_event:
-    scene black  # or your starting scene
 
-    # Reset variables
-    $ mash_count = 0
-    $ last_mash_time = time.time()
-
-    show screen endless_button_mash
-
-    # Waiting until screen handles progression
-    $ renpy.pause(3600.0, hard=True)
-
-    return
-
-
-label mash_success:
+label after_snowball_fight:
 
     scene snowball fight won
     play sound snowball volume 1.9
 
     z "Uhoh..."
-
-    return 
-
-
-
-label after_snowball_fight:
-
+    
     scene black
     play sound thud volume 1.9
     "{cps=40}!{/cps}"
@@ -597,186 +804,191 @@ label after_snowball_fight:
     c "{cps=30}So are you gonna stay quiet the whole time or what? Aren't you gonna ask me why i woke you up in the first place?{/cps}"
     "{cps=40}{i}Oh right! Seems like a good oppurtunity to ask her...{/cps}"
 
-    label question_classmate: 
-        scene infirmary cheeky
-        c "{cps=40}Ask away, it's not like we're skipping next lecture on {i}purpose{/i}{/cps}~"
+    "DEBUG: if you see this, flow is correct."
+    jump question_classmate
+    
 
-        menu: 
-            "What? we're skipping our lecture?? ":
-                scene infirmary concerned 
-                c "{cps=40}Woah, i knew you were a nerd, but being {i}that{/i} concerned for school?{/cps}"
-                c "{cps=40}Relax, i was just kidding, its lunchbreak.{/cps}"
-                z "{cps=40}Oh thank god, i thought you were serious..{/cps}"
-                c "{cps=40}Heh, when have i ever been serious about school?~{/cps}"
-                z "{cps=40}Never?{/cps}"
-                scene infirmary cheeky
-                c "{cps=40} Exactly{/cps}"
-                call question_classmate
+label question_classmate: 
+    scene infirmary cheeky
+    c "{cps=40}Ask away, it's not like we're skipping next lecture on {i}purpose{/i}{/cps}~"
 
-            "Who are you again?":
-                scene infirmary thinking
-                c "..."
-                c "{cps=40}Your serious..?{/cps}"
-                scene infirmary concerned
-                c"{cps=40}We're in the same class!{/cps}"
-                z "{cps=40}...{/cps}"
-                c "{cps=40}I gave you my gum!{/cps}"
-                z "{cps=40}Hmm...{/cps}"
-                c  "{cps=40}I'm the new transfer student...{/cps}"
-                z "{cps=40}Oh! is your name Noor by any chance?{/cps}" 
-                n "{cps=40}..Wow, now i know what it feels like to just be remembered by a label. {/cps}"
-                z "{cps=40}..Sorry{/cps}"
-                scene infirmary cheeky
-                n "{cps=40}It's okay, i did the same thing when trying to remember you too{/cps}"
-                z "{cps=40}..Wow..{/cps}"
-                call question_classmate
+    menu: 
+        "What? we're skipping our lecture??":
+            scene infirmary concerned 
+            c "{cps=40}Woah, i knew you were a nerd, but being {i}that{/i} concerned for school?{/cps}"
+            c "{cps=40}Relax, i was just kidding, its lunchbreak.{/cps}"
+            z "{cps=40}Oh thank god, i thought you were serious..{/cps}"
+            c "{cps=40}Heh, when have i ever been serious about school?~{/cps}"
+            z "{cps=40}Never?{/cps}"
+            scene infirmary cheeky
+            c "{cps=40} Exactly{/cps}"
+            jump question_classmate
 
-            "Why are we in the infirmary?":
-                scene infirmary thinking
-                n "{cps=40}you forgot THAT too? To think we had such an wholesome moment together, forgotten...{/cps}"
-                z "{cps=30}Uhm{/cps}"
-                z "{cps=15}What did we do....{/cps}"
-                n "{cps=40}You came to my rescue when i collapsed and you brought me here!"
-                n "{cps=40}Though i told you to just use my wheelchair and push me, but instead, you insisted to..{/cps}"
-                z "{cps=15}Insisted what...{/cps}"
-                scene infirmary cheeky
-                n "{cps=40}To carry me.{/cps}"
-                n "{cps=15}{i}Bridal style{/i}{/cps}"
-                z "{cps=40}Nooo.....{/cps}"
-                "{cps=40}{size=-5}Why did i do something so embarassing.....{/size}{/cps}"
-                call question_classmate
+        "Who are you again?":
+            scene infirmary thinking
+            c "..."
+            c "{cps=40}Your serious..?{/cps}"
+            scene infirmary concerned
+            c"{cps=40}We're in the same class!{/cps}"
+            z "{cps=40}...{/cps}"
+            c "{cps=40}I gave you my gum!{/cps}"
+            z "{cps=40}Hmm...{/cps}"
+            c  "{cps=40}I'm the new transfer student...{/cps}"
+            z "{cps=40}Oh! is your name Noor by any chance?{/cps}" 
+            n "{cps=40}..Wow, now i know what it feels like to just be remembered by a label. {/cps}"
+            z "{cps=40}..Sorry{/cps}"
+            scene infirmary cheeky
+            n "{cps=40}It's okay, i did the same thing when trying to remember you too{/cps}"
+            z "{cps=40}..Wow..{/cps}"
+            jump question_classmate
 
-
-            "Did you hear me talking in my sleep?":
-                scene infirmary thinking
-                z "{cps=40}Did i say something weird? I think i was having a nightmare{/cps}"
-                z "{cps=40}..and i saw you taunting me in my sleep..{/cps}"
-                z "{cps=40}It was probably when you were trying to wake me up tho, so it might not be that important.. but still.{/cps}"
-                z "{cps=40}It seemed like you wanted to tell me something, like i was being blamed for.. {/cps}"
-                scene infirmary concerned
-                "..."
-                z "{cps=40}Nevermind it's probably nothing...{/cps}"
-                n "{cps=40}Yeah, don't think too much about it.{/cps}"
-                n "{cps=40}You were giving me the creeps back there, i was almost gonna...{/cps}"
-                scene infirmary thinking
-                n "{cps=40}Nevermind.{/cps}"
-
-                jump dozing_off
-
-    label dozing_off:
-        "{cps=30}{i}You talk with Noor for a while, asking what she thinks about the school{/i}{/cps}"
-        "{cps=30}{i}She says that she chose to come here specifically for a \"special\" person{/i}{/cps}"
-        "{cps=30}{i}... You sensed a bad feeling{/i}{/cps}"
-        "{cps=30}{i}Your chat goes on for quite a while, {i}so{/i} long that you feel kind of tired..{/i}{/cps}"
-        "{cps=30}{i}The both of you felt incredibly sleepy, like you two hadn't slept for days{/i}{/cps}"
-
-        scene sleepy
-        z "{cps=40}Hey... are you dozing off? We can't sleep here you know..{/cps}"
-        n "{cps=40}I'm not...  don't worry. Rather, worry about yourself, your yawning every five seconds.{/cps}"
-        z "{cps=40}Oh.. really, i didn't know...{/cps}"
-        z "{cps=15}that..{/cps}" 
-        play sound thud
-        scene black with vpunch
-        "{cps=30}{i}You both go in a deep sleep, you feel like you've never been this tired before...{/i}{/cps}"
-
-        scene horrifying
-        play sound horrifying_noise
-        z "{cps=40}Huh.. what's this feeling...{/cps}"
-        z "{cps=40}I feel like i've felt this way before..{/cps}"
-        z "{cps=40}When was that again..?{/cps}"
-        
-        scene noor sleepy with fade
-        z "{cps=40}!!!{/cps}"
-        z "{cps=40}What? why am i here... again?{/cps}"
-        z "{cps=40}Hey are you there?{/cps}"
-        z "{cps=40}Oh no, is she breathing properly?{/cps}"
-        "{cps=40}{i}You try to check her pulse.{/i}{/cps}"
-        "{cps=30}{i}You can't feel any movement.{/i}{/cps}"
-        z "{cps=30}No way.. is she really?{/cps}"
-        "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
-        "{cps=15}...{/cps}"
-        scene shes awake 
-        n "{cps=40}So doc, figured it out yet?{/cps}"
-        z "{cps=70}WAH!{/cps}"
-        z "{cps=40}Oh my god, you scared me!{/cps}"
-        n "{cps=40}I would say the same to you...{/cps}"
-
-        "{cps=30}{i}You try to help her stand up{/i}{/cps}"
-        scene standing up
-        z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
-        n "{cps=30}{i}...Thank you{/i}{/cps}"
-        n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
-        z "{cps=30}{i}..Be serious{/i}{/cps}"
-
-        "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
-
-        scene playground with fade
-        "{cps=30}{i}This place reminds you of the same place as in your dream{/i}{/cps}"
-        "{cps=30}{i}Snowy, trees everywhere, but it seems like youre at a playground.. kind of atleast.{/i}{/cps}"
-        z "{cps=30}This is! This is the same type of place i saw in my dream earlier!{/cps}"
-        n "{cps=30}...Your joking{/cps}"
-        z "{cps=30}Why am i back here again... Why do i have to relive this...{/cps}"
-        z "{cps=30}What has this got to do with you too, Why are you here??{/cps}"
-        n "{cps=30}Calm down man, you're overthinking it. If what you saying is true, then doesn't that mean that we're in a dream rightnow?{/cps}"
-        z "{cps=20}Hmm.. yeah obviously.{/cps}"
-        n "{cps=30}Look, let's try to confirm if this is a dream, just to be certain.{/cps}"
-        z "{cps=30}I.. guess so.{/cps}"
-
-        label confirming_dream:
-            n "{cps=30}Let's confirm it{/cps}"
-
-            menu:
-                "Ask her to slap you":
-                    z "{cps=30}Look, i know this seems crazy of me to ask, but slap me.{/cps}"
-                    z "{cps=30}I believe that if your in a dream, you can't feel pain right?{/cps}"
-                    z "{cps=30}I know that this seems crazy, but i want to try out every possibility to figure out if we're in this shared dre-{/cps}{nw}"
-                    play sound faceslap
-                    z "!!!"
-                    "..."
-                    n "{cps=40}So.. did you feel anything{/cps}"
-                    z "{cps=40}..Only the element of surprise, fortunately{/cps}"
-                    z "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
-                    jump dream_confirmed
-
-                "Ask her what she remembers":
-                    z "{cps=30}Just to check if we both remember what happened, what can you recall up untill now?{/cps}"
-                    n "{cps=30}I remember waking you up from your earlier nightmare..{/cps}"
-                    z "{cps=30}Yeah..{/cps}"
-                    n "{cps=30}then talking with you for quite a bit..{/cps}"
-                    z "{cps=30}Uh huh..{/cps}"
-                    n "{cps=30}and we both felt sleepy and dozed off!{/cps}"
-                    z "{cps=30}Yeah! I think that's about right!{/cps}"
-                    jump dream_confirmed
-
-        label dream_confirmed:
-            z "{cps=30}Hmm, so we're really in a dream afterall.{/cps}"
-            n "{cps=30}Yeah, now that that's settled, we still have to figure out the \"why\" to this.{/cps}"
-            "{cps=30}{i}You and Noor decide to give a closer look at our surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
-            "{cps=40}{i}There's ordinary playground equipment, such as swings, a seesaw and a picnic table, but you also see things that feel slightly off to be there.{/i}{/cps}"
-            "{cps=40}{i}Things like a safe, cake, and worst of all, a door standing in the middle of nowhere are nearby the area.{/i}{/cps}"
-            "{cps=30}{i}You also see Children that seem to be playing in the playground, well, most of them, some of them are just quiet, like theyre waiting for someone to play with them.{/i}{/cps}"
-
-            n "{cps=40}Hey, i can be wrong, but this place, does it remind you of somewhere you've been before?{/cps}"
-            z "{cps=40}What? no, not really.. this place is just giving me the creeps!{/cps}" 
-            n "{cps=40}Hmm, seems like my theory was incorrect then.{/cps}"
-            z "{cps=40}Huh, what theory?{/cps}"
-            n "{cps=40}...Well, i presume were stuck in your dream right now - because earlier you told me that this dream looked allot like the first dream you had.{/cps}"
-            n "{cps=40}And if that's true - I thought, \"is it possible that we're seeing something from your point of view of something? like a fond memory?\"{/cps}"
-            z "{cps=40}Oh wow, now that i think about it.. that does make sense!{/cps}"
-            z "{cps=40}One thing im certain of, is that this place reminds me allot of the dream i had earlier; same snowy conditions, the same tall dark trees, things like that.{/cps}"
-            z "{cps=40}i was being forced to play with this little girl in my dream, and after i misjudged my strength and tried to check on her she...{/cps}"
-            z "{cps=40}!{/cps}"
-            z "{cps=40}What if - instead of MY memories - this place is connected to that GIRL'S memory?{/cps}"
-            z "{cps=40}The fact that children are here, and that were in a playground, makes {i}this{/i} theory more.. well-founded!{/cps}"
-            n "{cps=40}That does seem more likely - good job on figuring it out! Look's like your not entirely useless after all!{/cps}"
-            z "{cps=40}What's that supposed to mean...{/cps}"
-            n "{cps=40}I think that it's a good idea to explore the area because i don't think that we'll wake up anytime soon.{/cps}"
-            n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with the kid guarding it.{/cps}"
-
-            jump exploration_dream_realm
+        "Why are we in the infirmary?":
+            scene infirmary thinking
+            n "{cps=40}you forgot THAT too? To think we had such an wholesome moment together, forgotten...{/cps}"
+            z "{cps=30}Uhm{/cps}"
+            z "{cps=15}What did we do....{/cps}"
+            n "{cps=40}You came to my rescue when i collapsed and you brought me here!"
+            n "{cps=40}Though i told you to just use my wheelchair and push me, but instead, you insisted to..{/cps}"
+            z "{cps=15}Insisted what...{/cps}"
+            scene infirmary cheeky
+            n "{cps=40}To carry me.{/cps}"
+            n "{cps=15}{i}Bridal style{/i}{/cps}"
+            z "{cps=40}Nooo.....{/cps}"
+            "{cps=40}{size=-5}Why did i do something so embarassing.....{/size}{/cps}"
+            jump question_classmate
 
 
-        label exploration_dream_realm:
+        "Did you hear me talking in my sleep?":
+            scene infirmary thinking
+            z "{cps=40}Did i say something weird? I think i was having a nightmare{/cps}"
+            z "{cps=40}..and i saw you taunting me in my sleep..{/cps}"
+            z "{cps=40}It was probably when you were trying to wake me up tho, so it might not be that important.. but still.{/cps}"
+            z "{cps=40}It seemed like you wanted to tell me something, like i was being blamed for.. {/cps}"
+            scene infirmary concerned
+            "..."
+            z "{cps=40}Nevermind it's probably nothing...{/cps}"
+            n "{cps=40}Yeah, don't think too much about it.{/cps}"
+            n "{cps=40}You were giving me the creeps back there, i was almost gonna...{/cps}"
+            scene infirmary thinking
+            n "{cps=40}Nevermind.{/cps}"
+
+            jump dozing_off
+
+label dozing_off:
+    "{cps=30}{i}You talk with Noor for a while, asking what she thinks about the school{/i}{/cps}"
+    "{cps=30}{i}She says that she chose to come here specifically for a \"special\" person{/i}{/cps}"
+    "{cps=30}{i}... You sensed a bad feeling{/i}{/cps}"
+    "{cps=30}{i}Your chat goes on for quite a while, {i}so{/i} long that you feel kind of tired..{/i}{/cps}"
+    "{cps=30}{i}The both of you felt incredibly sleepy, like you two hadn't slept for days{/i}{/cps}"
+
+    scene sleepy
+    z "{cps=40}Hey... are you dozing off? We can't sleep here you know..{/cps}"
+    n "{cps=40}I'm not...  don't worry. Rather, worry about yourself, your yawning every five seconds.{/cps}"
+    z "{cps=40}Oh.. really, i didn't know...{/cps}"
+    z "{cps=15}that..{/cps}" 
+    play sound thud
+    scene black with vpunch
+    "{cps=30}{i}You both go in a deep sleep, you feel like you've never been this tired before...{/i}{/cps}"
+
+    scene horrifying
+    play sound horrifying_noise
+    z "{cps=40}Huh.. what's this feeling...{/cps}"
+    z "{cps=40}I feel like i've felt this way before..{/cps}"
+    z "{cps=40}When was that again..?{/cps}"
+    
+    scene noor sleepy with fade
+    z "{cps=40}!!!{/cps}"
+    z "{cps=40}What? why am i here... again?{/cps}"
+    z "{cps=40}Hey are you there?{/cps}"
+    z "{cps=40}Oh no, is she breathing properly?{/cps}"
+    "{cps=40}{i}You try to check her pulse.{/i}{/cps}"
+    "{cps=30}{i}You can't feel any movement.{/i}{/cps}"
+    z "{cps=30}No way.. is she really?{/cps}"
+    "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
+    "{cps=15}...{/cps}"
+    scene shes awake 
+    n "{cps=40}So doc, figured it out yet?{/cps}"
+    z "{cps=70}WAH!{/cps}"
+    z "{cps=40}Oh my god, you scared me!{/cps}"
+    n "{cps=40}I would say the same to you...{/cps}"
+
+    "{cps=30}{i}You try to help her stand up{/i}{/cps}"
+    scene standing up
+    z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
+    n "{cps=30}{i}...Thank you{/i}{/cps}"
+    n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
+    z "{cps=30}{i}..Be serious{/i}{/cps}"
+
+    "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
+
+    scene playground with fade
+    "{cps=30}{i}This place reminds you of the same place as in your dream{/i}{/cps}"
+    "{cps=30}{i}Snowy, trees everywhere, but it seems like youre at a playground.. kind of atleast.{/i}{/cps}"
+    z "{cps=30}This is! This is the same type of place i saw in my dream earlier!{/cps}"
+    n "{cps=30}...Your joking{/cps}"
+    z "{cps=30}Why am i back here again... Why do i have to relive this...{/cps}"
+    z "{cps=30}What has this got to do with you too, Why are you here??{/cps}"
+    n "{cps=30}Calm down man, you're overthinking it. If what you saying is true, then doesn't that mean that we're in a dream rightnow?{/cps}"
+    z "{cps=20}Hmm.. yeah obviously.{/cps}"
+    n "{cps=30}Look, let's try to confirm if this is a dream, just to be certain.{/cps}"
+    z "{cps=30}I.. guess so.{/cps}"
+    jump confirming_dream
+
+label confirming_dream:
+    n "{cps=30}Let's confirm it{/cps}"
+
+    menu:
+        "Ask her to slap you":
+            z "{cps=30}Look, i know this seems crazy of me to ask, but slap me.{/cps}"
+            z "{cps=30}I believe that if your in a dream, you can't feel pain right?{/cps}"
+            z "{cps=30}I know that this seems crazy, but i want to try out every possibility to figure out if we're in this shared dre-{/cps}{nw}"
+            play sound faceslap
+            z "!!!"
+            "..."
+            n "{cps=40}So.. did you feel anything{/cps}"
+            z "{cps=40}..Only the element of surprise, fortunately{/cps}"
+            z "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
+            jump dream_confirmed
+
+        "Ask her what she remembers":
+            z "{cps=30}Just to check if we both remember what happened, what can you recall up untill now?{/cps}"
+            n "{cps=30}I remember waking you up from your earlier nightmare..{/cps}"
+            z "{cps=30}Yeah..{/cps}"
+            n "{cps=30}then talking with you for quite a bit..{/cps}"
+            z "{cps=30}Uh huh..{/cps}"
+            n "{cps=30}and we both felt sleepy and dozed off!{/cps}"
+            z "{cps=30}Yeah! I think that's about right!{/cps}"
+            jump dream_confirmed
+
+label dream_confirmed:
+    z "{cps=30}Hmm, so we're really in a dream afterall.{/cps}"
+    n "{cps=30}Yeah, now that that's settled, we still have to figure out the \"why\" to this.{/cps}"
+    "{cps=30}{i}You and Noor decide to give a closer look at our surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
+    "{cps=40}{i}There's ordinary playground equipment, such as swings, a seesaw and a picnic table, but you also see things that feel slightly off to be there.{/i}{/cps}"
+    "{cps=40}{i}Things like a safe, cake, and worst of all, a door standing in the middle of nowhere are nearby the area.{/i}{/cps}"
+    "{cps=30}{i}You also see Children that seem to be playing in the playground, well, most of them, some of them are just.. sitting.. alone.{/i}{/cps}"
+
+    n "{cps=40}Hey, i can be wrong, but this place, does it remind you of somewhere you've been before?{/cps}"
+    z "{cps=40}What? no, not really.. this place is just giving me the creeps!{/cps}" 
+    n "{cps=40}Hmm, seems like my theory was incorrect then.{/cps}"
+    z "{cps=40}Huh, what theory?{/cps}"
+    n "{cps=40}...Well, i presume were stuck in your dream right now - because earlier you told me that this dream looked allot like the first dream you had.{/cps}"
+    n "{cps=40}And if that's true - I thought, \"is it possible that we're seeing something from your point of view of something? like a fond memory?\"{/cps}"
+    z "{cps=40}Oh wow, now that i think about it.. that does make sense!{/cps}"
+    z "{cps=40}One thing im certain of, is that this place reminds me allot of the dream i had earlier; same snowy conditions, the same tall dark trees, things like that.{/cps}"
+    z "{cps=40}i was being forced to play with this little girl in my dream, and after i misjudged my strength and tried to check on her she...{/cps}"
+    z "{cps=40}!{/cps}"
+    z "{cps=40}What if - instead of MY memories - this place is connected to that GIRL'S memory?{/cps}"
+    z "{cps=40}The fact that children are here, and that were in a playground, makes {i}this{/i} theory more.. well-founded!{/cps}"
+    n "{cps=40}That does seem more likely - good job on figuring it out! Look's like your not entirely useless after all!{/cps}"
+    z "{cps=40}What's that supposed to mean...{/cps}"
+    n "{cps=40}I think that it's a good idea to explore the area because i don't think that we'll wake up anytime soon.{/cps}"
+    n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with the kid guarding it.{/cps}"
+
+    jump playground_hub
+
+
+label exploration_dream_realm:
 
 
 
