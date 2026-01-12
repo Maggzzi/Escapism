@@ -99,6 +99,8 @@ init python:
             self.name = name
             self.stage = stage
 
+
+
 # =================
 # VARIABLES
 # =================
@@ -230,27 +232,6 @@ screen mash_snowballfight():
             Jump("mash_success")])
     ]
 
-# Button smash for Swing pushing screen
-screen endless_button_mash_swing():
-    modal True
-
-    # Background that shakes
-    add "swing_scene" at shake(amount=5 if mash_count % 2 == 0 else -5)
-
-    # Key prompt
-    text "PRESS Q!" xpos 0.5 ypos 0.5 xanchor 0.5 size 50 bold True color "#823333"
-
-    # Encouragement message with a timer
-    timer 1.0 action Function(lambda: None) repeat True  # redraw screen every second
-    if time.time() - last_mash_time > 15.0:
-        text "Keep it up!" xpos 0.5 ypos 0.3 xanchor 0.5 color "#ff0000" size 40
-
-    # Key press handling
-    key "K_q" action [
-        SetVariable("last_mash_time", time.time()),      # update timer
-        SetVariable("mash_count", mash_count + 1),       # increment count
-        If(mash_count + 1 >= goal, [Hide("endless_button_mash"), Jump("mash_success")])
-    ]
 
 screen playground:
 
@@ -259,19 +240,21 @@ screen playground:
 
         # Swing hotspot
         hotspot (swing_x, swing_y, swing_w, swing_h):
+            hovered Show("debug_hitbox_swing")
+            unhovered Hide("debug_hitbox_swing")
             action [Hide("debug_hitbox_swing"), Jump("swing_scene")]
 
         # Seesaw hotspot
         hotspot (seesaw_x, seesaw_y, seesaw_w, seesaw_h):
             hovered Show("debug_hitbox_seesaw")
             unhovered Hide("debug_hitbox_seesaw")
-            action Jump("seesaw_scene")
+            action [Hide("debug_hitbox_seesaw"), Jump("seesaw_scene")]
 
         # Picnic hotspot
         hotspot (picnic_x, picnic_y, picnic_w, picnic_h):
             hovered Show("debug_hitbox_picnic")
             unhovered Hide("debug_hitbox_picnic")
-            action Jump("picnic_scene")
+            action [Hide("debug_hitbox_picnic"), Jump("picnic_scene")]
 
 
 screen debug_hitbox_swing:
@@ -315,6 +298,7 @@ label mash_event_snowballfight:
     # Reset variables before starting
     $ mash_count = 0
     $ last_mash_time = time.time()
+    $ goal = 10 
 
     # Show mash screen
     show screen mash_snowballfight
@@ -327,21 +311,9 @@ label mash_event_snowballfight:
 label mash_success:
     jump after_snowball_fight
 
-# mashing event (for swinging scene)
-label mash_event_swing:
-    scene black  # or your starting scene
-
-    # Reset variables
-    $ mash_count = 0
-    $ last_mash_time = time.time()
-
-    show screen endless_button_mash_swing
-    # Waiting until screen handles progression
-    $ renpy.pause(3600.0, hard=True)
-
-    return
 
 
+# Change position of debug hitboxes 
 label playground_hub:
     # Move swing a bit left
     $ swing_x = 1080
@@ -384,9 +356,8 @@ label swing_scene:
         s "I knew you had it in you!"
         n "I knew that i could count on you!"
         z "..."
-
-        scene black
-        call mash_event_swing
+        "you push the girl in her swing, you feel like its been longer than three minutes."
+        "you just hope that this'll end quickly..."
         
         $ swing.stage = SWING_PLAYED 
         s "Whoo! that was fun!!!"
@@ -404,6 +375,7 @@ label swing_scene:
         s "Ill do it for you!~"
         "click"
 
+        scene black
         "You hear the sound glitching at first, but it got slightly clearer. You and Noor both listen to the recording."
         "{size=-5}Get up!{/size} i said GET UP!"
         "kicking sound"
@@ -441,9 +413,10 @@ label swing_scene:
         "Besides, my clean record and high grades make me a pretty hard student to expel."
         "Heheh, thanks nonetheless, what's your name by the way?"
         "... It's Zuha, what's your name?"
-        "Oh, my name is %?!38*$-"
+        "Oh, my name is-"
         "The rusty recorder crashes, hearing glitching noises and eventually, going quiet."
 
+        scene swing_scene
         z "That, was me? and the girl i saw in my dream, i recognize her voice!"
         s "Whuh? your the kid that beat that her up?? {size=-5}you don't exactly look the part..{/size}"
         n "......."
@@ -451,7 +424,7 @@ label swing_scene:
         z "What do you think Noor, you recognize someone in here too"
         n "!"
         n "N-no, not the slightest clue.."
-        "Huh, it felt like she was almost gonna tell me though.. well whatever"
+        "Huh, it felt like she was almost gonna tell me something though.. well whatever"
         z "L-lets go explore the playground further, thanks for showing us this Seo-ah!"
         s "No problem, don't miss me too much now!"
         n "Heh, we won't!~"
@@ -460,7 +433,6 @@ label swing_scene:
 
     elif swing.stage == SWING_PLAYED:
         "The girl is satisfied playing with you."
-        jump playground_hub
 
         "What do i do?"
 
@@ -469,8 +441,7 @@ label swing_scene:
                 "She smiles as i push her with all my might."
                 "After a while, she seems happier."
 
-                $ swing.stage = 1
-                $ seesaw.stage = 2
+                $ seesaw.stage = SEESAW_ASK_IF_PLAY_WITH_GIRL_A
 
                 $ inventory.append(recorder)
                 "The girl hands me a recorder, she lets me listen to it."
@@ -490,7 +461,8 @@ label seesaw_scene:
 
         n "Hello there young girl! Mind telling me what's got you so lost in thought?"
         h "Uhm.. who are you.. two?"
-        n "My name is Noor and this girl's name is Zoo!"
+        n "My name is Noor and this girl's name is!"
+        n "...uh"
         z "...It's Zuha"
         n "In any case, we wanted to ask if everything's alright, you look like your gonna bore a hole in the ground just by staring there for too long."
         z "Noor... why can't you show concern like a normal person."
@@ -510,7 +482,7 @@ label seesaw_scene:
         "While your still below her, you get confused why your still below her, processing what happened so suddenly, and it finally hits you."
         z "Ah..."
         "{i}You now realize what Ha-eun was trying to say.{/i}"
-        n "NO way.. *snort*"
+        n "NO way.. "
         n "BAHHWHAHHAAHAHAAH"
         z "You get flushed, realising you might be {i}too{/i} heavy to play on the seesaw afterall...theres a reason why they're made for {u}kids{/u} only."
         h "Uhmm miss, im feeling scared, im too high up!"
@@ -533,7 +505,8 @@ label seesaw_scene:
         jump playground_hub 
 
     # After you play with girl at the swings
-        
+    elif seesaw.stage = SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
+
         "What should i say?"
         menu:
             "Ask if she'd like to play with girl a on the seesaw":
@@ -713,7 +686,7 @@ label start:
     lg "{cps=40}YEAYAA!!!! You won't regret this!! trust me!~~{/cps}"
     z "{cps=15}I hope so..{/cps}"
     
-    call mash_event_snowballfight
+    call mash_event_snowballfight from _call_mash_event_snowballfight
     jump after_snowball_fight
 
 
@@ -760,10 +733,9 @@ label after_snowball_fight:
     c "{cps=40}Your scum. That's what you are.{/cps}"
     c "{cps=40}Just like the rest of those two-faced morons{/cps}"
     "{cps=30}{i}I.. {/i}{/cps}"
-    "{cps=30}{i}I froze; it felt like my mouth was shut with wires, unable to utter a single word.{/i}{/cps}"
     c "{cps=30}It's all your fault{/cps}{nw}"
     c "{cps=30}If only if i was there on time{/cps}{nw}"
-    c "{cps=30}If only \"xxxx\" had listened to me{/cps}{nw}"
+    c "{cps=30}If only \"!?!?\" had listened to me{/cps}{nw}"
     c "{cps=30}This wouldn't have happened if-{/cps}{nw}"
     stop music fadeout 1.0
 
@@ -804,7 +776,6 @@ label after_snowball_fight:
     c "{cps=30}So are you gonna stay quiet the whole time or what? Aren't you gonna ask me why i woke you up in the first place?{/cps}"
     "{cps=40}{i}Oh right! Seems like a good oppurtunity to ask her...{/cps}"
 
-    "DEBUG: if you see this, flow is correct."
     jump question_classmate
     
 
@@ -848,11 +819,11 @@ label question_classmate:
             z "{cps=30}Uhm{/cps}"
             z "{cps=15}What did we do....{/cps}"
             n "{cps=40}You came to my rescue when i collapsed and you brought me here!"
-            n "{cps=40}Though i told you to just use my wheelchair and push me, but instead, you insisted to..{/cps}"
+            n "{cps=40}Though i told you to just use my wheelchair, but instead, you insisted to..{/cps}"
             z "{cps=15}Insisted what...{/cps}"
             scene infirmary cheeky
             n "{cps=40}To carry me.{/cps}"
-            n "{cps=15}{i}Bridal style{/i}{/cps}"
+            n "{cps=15}{i}Bridal Carry Style{/i}{/cps}"
             z "{cps=40}Nooo.....{/cps}"
             "{cps=40}{size=-5}Why did i do something so embarassing.....{/size}{/cps}"
             jump question_classmate
@@ -907,17 +878,15 @@ label dozing_off:
     "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
     "{cps=15}...{/cps}"
     scene shes awake 
-    n "{cps=40}So doc, figured it out yet?{/cps}"
+    n "{cps=40}So, figured it out yet?{/cps}"
     z "{cps=70}WAH!{/cps}"
-    z "{cps=40}Oh my god, you scared me!{/cps}"
+    z "{cps=40}Oh my god you scared me!{/cps}"
     n "{cps=40}I would say the same to you...{/cps}"
 
     "{cps=30}{i}You try to help her stand up{/i}{/cps}"
     scene standing up
     z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
     n "{cps=30}{i}...Thank you{/i}{/cps}"
-    n "{cps=30}{i}A little bit more and people'll think that we're a pair{/i}{/cps}"
-    z "{cps=30}{i}..Be serious{/i}{/cps}"
 
     "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
 
@@ -945,7 +914,7 @@ label confirming_dream:
             play sound faceslap
             z "!!!"
             "..."
-            n "{cps=40}So.. did you feel anything{/cps}"
+            n "{cps=40}So.. did you feel anything?{/cps}"
             z "{cps=40}..Only the element of surprise, fortunately{/cps}"
             z "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
             jump dream_confirmed
@@ -963,7 +932,7 @@ label confirming_dream:
 label dream_confirmed:
     z "{cps=30}Hmm, so we're really in a dream afterall.{/cps}"
     n "{cps=30}Yeah, now that that's settled, we still have to figure out the \"why\" to this.{/cps}"
-    "{cps=30}{i}You and Noor decide to give a closer look at our surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
+    "{cps=30}{i}You decide to give a closer look at your surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
     "{cps=40}{i}There's ordinary playground equipment, such as swings, a seesaw and a picnic table, but you also see things that feel slightly off to be there.{/i}{/cps}"
     "{cps=40}{i}Things like a safe, cake, and worst of all, a door standing in the middle of nowhere are nearby the area.{/i}{/cps}"
     "{cps=30}{i}You also see Children that seem to be playing in the playground, well, most of them, some of them are just.. sitting.. alone.{/i}{/cps}"
@@ -988,43 +957,8 @@ label dream_confirmed:
     jump playground_hub
 
 
-label exploration_dream_realm:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-
-
-
-    # These display lines of dialogue.
-
-
-    # "Once you add a story, pictures, and music, you can release it to the world!"
-
-    # This ends the game.
 
     return
