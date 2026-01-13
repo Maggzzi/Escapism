@@ -368,6 +368,7 @@ label swing_scene:
         n "Now Seo-ah, explain to us the what happened here."
         s "Okay, but i won't tell you- here!"
         "Seo-ah gives you an old recorder, it seems cracked from the outside and a little rusty."
+        $ inventory.append(recorder)
         z "Why are you giving me this?"
         s "Well the thing is that i heard about the incident from this old recorder, it kept replaying the same thing over and over again."
         s "I thought, why tell them when they can hear the real thing?"
@@ -434,18 +435,25 @@ label swing_scene:
     elif swing.stage == SWING_PLAYED:
         "The girl is satisfied playing with you."
 
-        "What do i do?"
+        "I should ask them..."
 
         menu:
-            "Play with her":
-                "She smiles as i push her with all my might."
-                "After a while, she seems happier."
-
+            "I got a favor aswell":
+                "Hehe, i knew you guys missed me, but this early?"
+                "Well, i'd rather put it differently"
+                z"More like.... wanting a favor?"
+                s "Wow, your gonna use the same tactic i did? touché"
+                z "Well its not much, but we wanted to ask if you'd like to play with someone else this time."
+                z "That girl over there, she want's to use the seesaw, but she doesnt have anybody to play with"
+                s "Haven't you tried helping her out first? "
+                n "Trust me, she did"
+                z "Anyways... look like your up for the task?"
+                s "Hmmm...."
+                s "Eh, why not"
+                s "But only because i've got nothing to do!"
+                n "A win is a win"
                 $ seesaw.stage = SEESAW_ASK_IF_PLAY_WITH_GIRL_A
 
-                $ inventory.append(recorder)
-                "The girl hands me a recorder, she lets me listen to it."
-                "Maybe this girl would like to play with the girl at the seesaw."
                 jump playground_hub
 
 
@@ -505,7 +513,7 @@ label seesaw_scene:
         jump playground_hub 
 
     # After you play with girl at the swings
-    elif seesaw.stage = SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
+    elif seesaw.stage == SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
 
         "What should i say?"
         menu:
@@ -517,7 +525,7 @@ label seesaw_scene:
                 "Ha-eun replies and does the same, they begin to have a chat and sit on the seesaw"
                 "The both of them were having a great time together while rocking the seesaw. Soon, laughter fills the playground."
 
-                $ seesaw.stage = 3
+                $ seesaw.stage = SEESAW_AFTER_PLAYING
                 $ inventory.append(hairpin)
                 $ inventory.append(cutlery)
 
@@ -536,7 +544,8 @@ label seesaw_scene:
                 z "The hairpin feels strangely nostalgic. i don't know why, but i think ive seen one like this for sale in a clothing store before..." 
                 z "Is this.. maybe my hairpin?"
                 n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a 17 year old like yourself."
-                jump playground_return
+                z "huh..."
+                jump playground_hub
 
             "Ask if she'd like to play with Inaya on the seesaw":
                 n "Wow.. making big decisions all on your own huh?"
