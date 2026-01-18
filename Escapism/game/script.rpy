@@ -43,8 +43,9 @@ init -1 python:        #init -1 loads before normal init blocks
     # Seesaw
     SEESAW_NOT_PLAYED = 0
     SEESAW_PLAYED = 1
-    SEESAW_ASK_IF_PLAY_WITH_GIRL_A = 2
-    SEESAW_AFTER_PLAYING = 3
+    SEESAW_ASK = 2
+    SEESAW_ASK_IF_PLAY_WITH_GIRL_A = 3
+    SEESAW_AFTER_PLAYING = 4
 
     # Picnic 
     NO_MISSION_DONE = 0
@@ -336,6 +337,7 @@ label playground_hub:
 label swing_scene:
     scene swing_scene
 
+    # swing.stage = 0
     if swing.stage == SWING_NOT_PLAYED:
         "As you approach the swing, a young girl is swinging by herself. She looks up as you draw near."
         s "Hey there! you, with the dark hair!"
@@ -372,7 +374,7 @@ label swing_scene:
         z "Why are you giving me this?"
         s "Well the thing is that i heard about the incident from this old recorder, it kept replaying the same thing over and over again."
         s "I thought, why tell them when they can hear the real thing?"
-        z "{cps=40}Ah, but i don't really know what button to pre-{nw}{/cps}"
+        z "{cps=40}Ah, but i don't know what button to pre-{nw}{/cps}"
         s "Ill do it for you!~"
         "click"
 
@@ -432,7 +434,8 @@ label swing_scene:
 
         jump playground_hub
 
-    elif swing.stage == SWING_PLAYED:
+    #  seesaw.stage = 1 and swing.stage =  1
+    elif seesaw.stage == SEESAW_ASK and swing.stage == SWING_PLAYED:
         "The girl is satisfied playing with you."
 
         "I should ask them..."
@@ -454,7 +457,23 @@ label swing_scene:
                 n "A win is a win"
                 $ seesaw.stage = SEESAW_ASK_IF_PLAY_WITH_GIRL_A
 
-                jump playground_hub
+        jump playground_hub
+
+    # swing.stage = 1
+    elif swing.stage == SWING_PLAYED:
+        "the girl is slowly pushing the swing on her own."
+        "she seemes satisfied, but you get the feeling that she feels kind of lonely"
+        z "{i}Is there something i can do?{/i}"
+        jump playground_hub
+
+
+    # seesaw.stage = 3
+    elif seesaw.stage == SEESAW_AFTER_PLAYING:
+        "The whole playground is quiet."
+        "It seems that they both left."
+        jump playground_hub
+
+
 
 
 # seesaw_scene dream
@@ -462,7 +481,7 @@ label seesaw_scene:
     # show closeup seesaw after clicking
     scene seesaw_scene
 
-    #AFTER YOU PLAY WITH HER, SEESAW_STAGE IS + 1 
+    #seesaw.stage = 0
     if seesaw.stage == SEESAW_NOT_PLAYED:
         "You see a little girl sitting on the ground with her back laying on one end of the seesaw."
         "You and Noor notice the sad and hollow looking expression on the the girl's face,. You get an idea to try and cheer her up"
@@ -501,18 +520,20 @@ label seesaw_scene:
         z "Hmm, i think i know what i should do."
         n "... I have a bad feeling i know where this is going."
 
-        $ seesaw.stage = 1 
+        $ seesaw.stage = SEESAW_PLAYED
         jump playground_hub
 
-    # After YOU play with girl b at swings
+    # seesaw.stage = 1
     elif seesaw.stage == SEESAW_PLAYED: 
         "The girl wants to play with someone around her age."
         "She looks bored."
 
-        "Maybe i should come back later..."
+        # seesaw.stage = 2
+        $ seesaw.stage = SEESAW_ASK
+        "I think i know who could play with her..."
         jump playground_hub 
 
-    # After you play with girl at the swings
+    # seesaw.stage = 3
     elif seesaw.stage == SEESAW_ASK_IF_PLAY_WITH_GIRL_A:
 
         "What should i say?"
@@ -529,9 +550,11 @@ label seesaw_scene:
                 $ inventory.append(hairpin)
                 $ inventory.append(cutlery)
 
-                "Ha-eun seems satisfied after all that playing and rushes over to you."
+                "Ha-eun seems satisfied and rushes over to you."
                 h "Miss Zuha, thank you for encouraging me to give girl a a chance, i had a wonderfull time with her!"
                 h "To express my gratitude, i'd like to give you something that may come handy to you in the future"
+                "Got item \"Hairpin\""
+                "Got item \"Cutlery\""
                 "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you knew it, she vanished with girl a."
                 n "Soo... not only this place, but the items we keep getting are very questionable huh"
                 n "I mean, who in their right mind would just give us these forks and knives, along side a-"
@@ -554,23 +577,30 @@ label seesaw_scene:
 
                 jump seesaw_scene
                 
-
+    # seesaw.stage == 3
     elif seesaw.stage == SEESAW_AFTER_PLAYING:
     
         "The seesaw creaks quietly."
         "No one is here anymore."
-        #jump playground_return
+        jump playground_hub
 
-    label picnic_scene:
-    scene bg pincic
 
-    if seesaw.stage < 2:
-        # MOET MEER TOEVOEGEN, HEB VOOR NU NIET GEADD!
-        "Theres cake and a safe on the picnic table."
-        "But you won't eat the cake, even if it's your favourite type It;s because you REFUSE to eat cake with you you need a fork {bold}"
-        "I feel like i'm missing something."
-        #jump playground_return
 
+label picnic_scene:
+    scene picnic table prototype
+
+    if cutlery in inventory:
+        "You use the cutlery to eat the cake properly."
+        $ cake.stage = CAKE_EATEN_WITH_CUTLERY
+        jump playground_hub
+
+    else: 
+        "You stare at the cake, it has nine candles on it"
+        "It looks very delicous, you get to urge to eat it"
+        "But- theres no way you're eating cake with your barehands!"
+        "You feel like you're missing something."
+        z "{i}Lets head back for now..{/i}"
+        jump playground_hub
 
 
 
