@@ -232,7 +232,7 @@ screen mash_snowballfight():
             Jump("mash_success")])
     ]
 
-
+# playground screen
 screen playground():
 
     imagemap:
@@ -257,6 +257,7 @@ screen playground():
             unhovered Hide("debug_hitbox_picnic")
             action [Hide("debug_hitbox_picnic"), Jump("picnic_scene")]
 
+#picnic table screen
 screen picnic_imagemap():
     imagemap:
         ground "picnic table.png"
@@ -286,7 +287,7 @@ screen debug_hitbox_picnic:
     add Solid("#ffff0088") xpos picnic_x ypos picnic_y xsize picnic_w ysize picnic_h
 
 
-
+#inventory screen
 screen inventory_screen():
     tag menu
 
@@ -457,7 +458,7 @@ label swing_scene:
         "I should ask them..."
 
         menu:
-            "I got a favor aswell":
+            "I got a favor":
                 "Hehe, i knew you guys missed me, but this early?"
                 "Well, i'd rather put it differently"
                 z"More like.... wanting a favor?"
@@ -601,7 +602,7 @@ label seesaw_scene:
 label picnic_scene:
     scene picnic table prototype
 
-    "You see strange items on the picnic table, you question who would do such a thing."
+    "You notice strange items on the picnic table, and wonder who put them there."
     z "Why... is there a safe.... and a cake here?"
     n "Huh, Maybe these items have a deeper meaning, disguised as random objects."
     n "Or maybe there's more than meets the eye..."
@@ -609,7 +610,7 @@ label picnic_scene:
     n "Maybe this is our wake-up call to not take anything here too seriously."
     n "To stop with questioning everything and just go with the flow."
     z "I hardly think that's the case..."
-    z "Lets just... take a closer look before we decide anything."
+    z "Lets just... take a closer look before we decide on anything."
 
     call screen picnic_imagemap
     return
@@ -621,16 +622,103 @@ label cake_interaction:
     "It reads the following:"
     "{i}Happy 9nth birthday xxx AND xxx!{/i}"
     z "Hmm... so this is a birthday cake, but here? Whose birthday is it anyways?"
-    z "It's impossible to make out who it was meant for.. but it does look delicous..!"
-    z "It's a strawberry shortcake at that, i've always liked them!~"
+    z "It's impossible to make out who it was meant for.. but it does look delicous.."
+    z "It's a strawberry shortcake at that, i'm not a sweettooth, but!~"
     n "..."
-    z "Do you have any idea whose names it could be"
-    z "Or do you want to have a bite"
+    z "..Uh, nevermind that - do you have any idea whose name it could be?"
     n "...It looks exactly like——"
+    n "!"
     n "..."
     "Unexectedly, it looks like she cut herself off."
-    "You question the sudden change of mood, and can't bear the sil"
-    n "I've got no clue of what to make of those cleared out words"
+    "You question the sudden change of mood, and find the silence not so pleasant."
+    z "I've got no clue of what to make of those cleared out words."
+    z "And the cake is showing sings of melting... a cake - going to waste just like that..."
+    n "Sigh."
+    n "Just get this over with and eat it."
+    z "Wha? no, i couldn't! it's clearly made for someone else and i.. shouldnt... "
+    n "Come on, were in a dream right? you can practically do whatever you want."
+    n "Besides, i've had enough of these weird things we've been encountering nonstop."
+    "What should i do?"
+    menu:
+        "Eat the cake":
+            if cutlery in inventory:
+                z "It seems the cutlery we got actually did come in handy..."
+                z "I mean, who would want to eat cake with their barehands?"
+                n "Chances are that you'd actually do that tho, given how your eating {i}someone elses{/i} birthday cake."
+                z "Didnt you just say i had freewill..."
+                n "I mean.. it comes to a certain point."
+                z "We'll eat this together though, im not finishing the whole thing."
+                n "I. am. not. eating. that."
+                z "Come on... just taste it! i'll go first and let you know if its any good."
+                n "....."
+                n "if it means getting out of here faster.. okay."
+
+                "you use the cutlery that you got from Ha-eun to make even even pieces."
+                "There seems to be strawberry jam flowing out of the cake, which is getting you even more excited to try it out."
+                "You gave a fork to Noor and use one yourself, you take the first bite and...."
+                "It's delicious! You finish it in one sitting, however, you give a glance on Noors face..."
+                "She doesn't really seem to enjoy it that much."
+
+                n "Of all things, there HAD to be jam inside..."
+                z "Uh, hate to break it to you, but cakes being filled with jam is pretty common."
+                n "Ugh, i dont like jam at all- never once been a fan of it."
+                z "Well atleast you tried it?"
+                n "Whatever, if your done we should go ahead."
+                z "Hold up, let me just finish that one and..."
+                z "?"
+                z "Whats that... weird thing inside? in the middle?"
+                "You see something crumpled up like a ball - and around it there are..."
+                z "Glass shards?"
+                z "Wha-- why are there shards placed inside the cake??"
+                z "But i didn't feel anything sharp in my throat, even while chewing."
+                n "I guess we were lucky we didnt eat the most middle part of it."
+                n "I told you to calm it down a notch, you were planning on eating the whole thing, werent you?"
+                n "Not even that - if you decided it to eat it with your bare hands, you would've definetly gobbled that piece up without knowing."
+                n "I knew it, i knew this place was weird from the beginning."
+                n "Who in their right mind would do such a thing."
+                z "But whats that crumpled thing in the middle, though?"
+                z "It kind of looks like paper.."
+                n "Seriously? You really have a knack for poking at everything..."
+                "You ignore Noor's concern and try to pry the  crumpled up object out of the inside of the cake with your fork."
+                "Eventually, you take it out, and it seems to be made of laminated paper."
+                "Trying to straighten the paper, you see it for what it actually is:"
+                z "This is.. a photo!"
+                #scene birthdayp photo 
+                "Giving it another look, you see three young girls smiling for the photo, two with partyhats and.."
+                z "Wait- thats me!"
+                z "You see yourself standing next to the girl, who's in the middle"
+                z "Why.. am i in this photo? and the girl next to me, she looks awfully allot like the girl from my dream."
+                n "...What do you mean, your saying you saw HER in your dream?"
+                n "This doesn't make any sense, out of everyone.."
+                n "Why would she.. in your dream.."
+                "What, she knows this girl too?"
+                "Why is she acting so secretive?"
+                n "Besides that, this photo.. why is this here out of all places."
+                z "Well, most importantly, why are we in this photo in the first place?"
+                "Thinking back, that girl did ask you if you remembered her."
+                "Did you really know her all this time?"
+                "You try to really examine your surroundings in the photo, giving a closer look at the items that are present."
+                "You notice the same strawberry shortcake in the photo, with the names now being visible:"
+                "{i}Happy 9nth birthday Inaya AND Noor!{/i}"
+                z "Hmm, guessing by the girls wearing a partyhat, i assume the girl from my dream is named Inaya!"
+                z "The other girls name... "
+                z "That's strange, the other girls name is Noor if im not mistaken."
+                z "Wow, what a coincidence.. am i right?"
+                n "You... can't be that oblivious."
+                n "Thats me." 
+                z "Really??? {i}that's{/i} you????"
+                n "What are you trying to say."
+                z "Well, its just that..."
+                z "You both dont look the same!!"
+                z "At al!!"
+                z "You both dont have "
+                
+                
+
+        "Don't eat the cake"
+
+
+
     # if cutlery in inventory:
     #     "You use the cutlery to eat the cake properly."
     #     $ cake.stage = CAKE_EATEN_WITH_CUTLERY
@@ -838,9 +926,9 @@ label after_snowball_fight:
     c "HEY!"
     z "!!!"
     c "{cps=30}Oh, finally! I thought you were faking it for sure{/cps}"
-    z "{cps=30}Wait what? ..Aren't you?{/cps}"
+    z "{cps=30}Hold on? ..Aren't you?{/cps}"
     c "{cps=30}I?? aren't i what?{/cps}"
-    "{cps=30}Wait.. was i dreaming? Did she wake me up just now?{/cps}"
+    "{cps=30}Huh.. was i dreaming? Did she wake me up just now?{/cps}"
     c "{cps=25}Haa..{/cps}"
 
     c "{cps=40}Damn.. your really out of it.. {/cps}"
