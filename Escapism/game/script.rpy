@@ -43,7 +43,6 @@ init -1 python:        #init -1 loads before normal init blocks
     # Seesaw
     SEESAW_NOT_PLAYED = 0
     SEESAW_PLAYED = 1
-    SEESAW_ASK = 2
     SEESAW_ASK_IF_PLAY_WITH_GIRL_A = 3
     SEESAW_AFTER_PLAYING = 4
 
@@ -234,10 +233,11 @@ screen mash_snowballfight():
     ]
 
 
-screen playground:
+screen playground():
 
     imagemap:
         ground "playground.png"
+        hover: "playground_hover.png"
 
         # Swing hotspot
         hotspot (swing_x, swing_y, swing_w, swing_h):
@@ -256,6 +256,24 @@ screen playground:
             hovered Show("debug_hitbox_picnic")
             unhovered Hide("debug_hitbox_picnic")
             action [Hide("debug_hitbox_picnic"), Jump("picnic_scene")]
+
+screen picnic_imagemap():
+    imagemap:
+        ground "picnic table.png"
+        hover "picnic table hover.png"
+
+        #Cake spot
+        hotspot (cake_x, cake_y, cake_w, cake_h):
+            action Jump("cake_interaction")
+
+        #Safe hotspot
+        hotspot (safe_x, safe_y, safe_w, safe_h):
+            action Jump("safe_interaction")
+        
+        #Optional: click outside to leave
+        hotspot(0, 0, 1920, 1080):
+            action Jump("playground_hub")
+
 
 
 screen debug_hitbox_swing:
@@ -421,21 +439,19 @@ label swing_scene:
 
         scene swing_scene
         z "That, was me? and the girl i saw in my dream, i recognize her voice!"
-        s "Whuh? your the kid that beat that her up?? {size=-5}you don't exactly look the part..{/size}"
+        s "Whuh? your the kid that beat that her up?? {size=-5}i..{/size}"
         n "......."
-        n "No way... it's he-" 
         z "What do you think Noor, you recognize someone in here too"
-        n "!"
         n "N-no, not the slightest clue.."
-        "Huh, it felt like she was almost gonna tell me something though.. well whatever"
-        z "L-lets go explore the playground further, thanks for showing us this Seo-ah!"
+        "Huh, it felt like she was gonna tell me something.. well whatever"
+        z "Lets go explore the playground further, thanks for showing us this Seo-ah!"
         s "No problem, don't miss me too much now!"
-        n "Heh, we won't!~"
+        n "Heh, we won't.~"
 
         jump playground_hub
 
     #  seesaw.stage = 1 and swing.stage =  1
-    elif seesaw.stage == SEESAW_ASK and swing.stage == SWING_PLAYED:
+    elif seesaw.stage == SEESAW_PLAYED and swing.stage == SWING_PLAYED:
         "The girl is satisfied playing with you."
 
         "I should ask them..."
@@ -459,13 +475,6 @@ label swing_scene:
 
         jump playground_hub
 
-    # swing.stage = 1
-    elif swing.stage == SWING_PLAYED:
-        "the girl is slowly pushing the swing on her own."
-        "she seemes satisfied, but you get the feeling that she feels kind of lonely"
-        z "{i}Is there something i can do?{/i}"
-        jump playground_hub
-
 
     # seesaw.stage = 3
     elif seesaw.stage == SEESAW_AFTER_PLAYING:
@@ -473,7 +482,12 @@ label swing_scene:
         "It seems that they both left."
         jump playground_hub
 
-
+    # swing.stage = 1
+    elif swing.stage == SWING_PLAYED:
+        "the girl is slowly pushing the swing on her own."
+        "she seemes satisfied, but you get the feeling that she feels kind of lonely"
+        z "{i}Is there something i can do?{/i}"
+        jump playground_hub
 
 
 # seesaw_scene dream
@@ -484,20 +498,17 @@ label seesaw_scene:
     #seesaw.stage = 0
     if seesaw.stage == SEESAW_NOT_PLAYED:
         "You see a little girl sitting on the ground with her back laying on one end of the seesaw."
-        "You and Noor notice the sad and hollow looking expression on the the girl's face,. You get an idea to try and cheer her up"
+        "You and Noor notice the sad and hollow expression on the the girl's face. You try to cheer her up"
 
-        n "Hello there young girl! Mind telling me what's got you so lost in thought?"
+        n "Hello there! Mind telling me what's got you so lost in thought?"
         h "Uhm.. who are you.. two?"
-        n "My name is Noor and this girl's name is!"
-        n "...uh"
-        z "...It's Zuha"
-        n "In any case, we wanted to ask if everything's alright, you look like your gonna bore a hole in the ground just by staring there for too long."
-        z "Noor... why can't you show concern like a normal person."
-        h "wha- no.. it's just that... i..."
-        n "mhm?"
+        n "My name is Noor and this girl's name is Zuha!"
+        n "We wanted to ask if everything's alright, you look like your gonna bore a hole in the ground just by staring there."
+        z "{i}Why can't she show concern like a normal person..{/i}"
+        h "No.. it's just that... i..."
         h "...I really want to play on the seesaw, but theres nobody here to play with."
         h "The only kid playing in the park is that girl over there, on the swing, but i don't think i should bother her..."
-        z "So.. you just want someone to play with? What's your name dear?"
+        z "So.. you just want someone to play with? What's your name?"
         h "yes... my name is Ha-eun."
         z "Ha-eun, i'd love to play with you if it helps cheer you up!"
         h "A-are you sure? don't you think that-"
@@ -508,17 +519,16 @@ label seesaw_scene:
         "The moment you put your full weight onto the seat, Ha-eun is lifted high into the air on her end of the seesaw, now dangling from that height - she looks down at you from above."
         "While your still below her, you get confused why your still below her, processing what happened so suddenly, and it finally hits you."
         z "Ah..."
-        "{i}You now realize what Ha-eun was trying to say.{/i}"
+        "{i}Your too heavy, so your still on the ground... {/i}"
         n "NO way.. "
         n "BAHHWHAHHAAHAHAAH"
-        z "You get flushed, realising you might be {i}too{/i} heavy to play on the seesaw afterall...theres a reason why they're made for {u}kids{/u} only."
+        z "You realised you might be {i}too{/i} heavy to play on the seesaw afterall...theres a reason why they're made for {u}kids{/u} only."
         h "Uhmm miss, im feeling scared, im too high up!"
         z "O-oh yeah! im sorry, let me get you down!"
         "You stand up, bringing Ha-eun down - You notice she's in a much worser mood than before."
         h "Ugh.. now i'll never be able to play on the seesaw..."
         h "But still - thank you for trying miss, but i wish there was someone my age who could play with me.."
-        z "Hmm, i think i know what i should do."
-        n "... I have a bad feeling i know where this is going."
+        z "{i}Hmm, what should i do to cheer her up...{/i}."
 
         $ seesaw.stage = SEESAW_PLAYED
         jump playground_hub
@@ -528,9 +538,7 @@ label seesaw_scene:
         "The girl wants to play with someone around her age."
         "She looks bored."
 
-        # seesaw.stage = 2
-        $ seesaw.stage = SEESAW_ASK
-        "I think i know who could play with her..."
+        "I think i know what i should do..."
         jump playground_hub 
 
     # seesaw.stage = 3
@@ -539,7 +547,7 @@ label seesaw_scene:
         "What should i say?"
         menu:
             "Ask if she'd like to play with girl a on the seesaw":
-                h "Huh? oh no - why did you ask her? i don't know her that well.."
+                h "Huh? oh no- why did you ask her? i don't know her that well.."
                 z "You didn't know me and Noor before too, but we still got along pretty well didnt we? Try to give them a chance, i think anyone'll like the company of a girl like you!"
                 "Ha-eun gets flustered and hesitates a little but accepts your request."
                 "Girl a appears from behind you and introduces herself to her"
@@ -555,26 +563,30 @@ label seesaw_scene:
                 h "To express my gratitude, i'd like to give you something that may come handy to you in the future"
                 "Got item \"Hairpin\""
                 "Got item \"Cutlery\""
-                "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you knew it, she vanished with girl a."
-                n "Soo... not only this place, but the items we keep getting are very questionable huh"
+                "Ha-eun gives you a hairpin and cutlery before running off. You wonder where she found all these items but before you could ask her, she vanished with girl a."
+                n "Soo... not only this place, but the items we keep getting are starting to creep me out."
                 n "I mean, who in their right mind would just give us these forks and knives, along side a-"
                 n "..."
                 n "Hairpin..."
-                "The both of you inspect the hairpin, trying to examine every small detail given to it."
-                z "{cps=40} Wait a minute - i feel like i've seen this hairpin befo-{nw}{/cps}"
-                n "This hairpin! i remember somebody wearing this all the time!"
-                z "...As i was saying."
-                z "The hairpin feels strangely nostalgic. i don't know why, but i think ive seen one like this for sale in a clothing store before..." 
+                "Both of you inspect the hairpin, it's feels like you've seen this item before."
+                "You try to say something, but you look at Noor - who has a very disturbed look on her face."
+                z "What is it?"
+                n "..."
+                n "I've seen this before, this hairpin."
+                n "It feels so familiar and yet- i just can't remember where ive seen it..."
+                z "That's what i was thinking too! I think ive seen this one for sale in a clothing store before..." 
                 z "Is this.. maybe my hairpin?"
-                n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a 17 year old like yourself."
-                z "huh..."
+                n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a soon-to-be-adult like yourself.."
+                z "huh... ill just keep it for now"
+                "You put the items in you got in you pocket, still contemplating wether these items are usefull or not"
                 jump playground_hub
 
             "Ask if she'd like to play with Inaya on the seesaw":
-                n "Wow.. making big decisions all on your own huh?"
-                n "How about asking the person involved first before telling her what to do?"
-                "I'm still not gonna play with her even if you ask nicely - don't wanne be in your place like last time."
-
+                n "Wow.. i knew you were gonna say something weird like that."
+                n "Look kid, im sorry, but i can't play with you: me and Zuha have approximately the same bodyweight, and last time... "
+                n "Well, let's just say the seesaw wasn't exactly balanced."
+                z "We do?"
+                n "Just go with it"
                 jump seesaw_scene
                 
     # seesaw.stage == 3
@@ -589,18 +601,48 @@ label seesaw_scene:
 label picnic_scene:
     scene picnic table prototype
 
-    if cutlery in inventory:
-        "You use the cutlery to eat the cake properly."
-        $ cake.stage = CAKE_EATEN_WITH_CUTLERY
-        jump playground_hub
+    "You see strange items on the picnic table, you question who would do such a thing."
+    z "Why... is there a safe.... and a cake here?"
+    n "Huh, Maybe these items have a deeper meaning, disguised as random objects."
+    n "Or maybe there's more than meets the eye..."
+    z "How so?"
+    n "Maybe this is our wake-up call to not take anything here too seriously."
+    n "To stop with questioning everything and just go with the flow."
+    z "I hardly think that's the case..."
+    z "Lets just... take a closer look before we decide anything."
 
-    else: 
-        "You stare at the cake, it has nine candles on it"
-        "It looks very delicous, you get to urge to eat it"
-        "But- theres no way you're eating cake with your barehands!"
-        "You feel like you're missing something."
-        z "{i}Lets head back for now..{/i}"
-        jump playground_hub
+    call screen picnic_imagemap
+    return
+
+
+label cake_interaction:
+    "You inspect the cake, it's lit with nine cadles precisely."
+    "You see that theres something written on the cake, but some of the words are smeared away, probably because of the icing."
+    "It reads the following:"
+    "{i}Happy 9nth birthday xxx AND xxx!{/i}"
+    z "Hmm... so this is a birthday cake, but here? Whose birthday is it anyways?"
+    z "It's impossible to make out who it was meant for.. but it does look delicous..!"
+    z "It's a strawberry shortcake at that, i've always liked them!~"
+    n "..."
+    z "Do you have any idea whose names it could be"
+    z "Or do you want to have a bite"
+    n "...It looks exactly like——"
+    n "..."
+    "Unexectedly, it looks like she cut herself off."
+    "You question the sudden change of mood, and can't bear the sil"
+    n "I've got no clue of what to make of those cleared out words"
+    # if cutlery in inventory:
+    #     "You use the cutlery to eat the cake properly."
+    #     $ cake.stage = CAKE_EATEN_WITH_CUTLERY
+    #     jump playground_hub
+
+    # else: 
+    #     "You stare at the cake, it has nine candles on it"
+    #     "It looks very delicous, you get to urge to eat it"
+    #     "But- theres no way you're eating cake with your barehands!"
+    #     "You feel like you're missing something."
+    #     z "{i}Lets head back for now..{/i}"
+    #     jump playground_hub
 
 
 
