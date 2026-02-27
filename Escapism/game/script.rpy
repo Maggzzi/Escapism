@@ -206,7 +206,7 @@ transform shake(amount=10):
 # =================
 # SCREENS           
 # =================
-# A screen is a UI layer for = buttons, clickable areas, overlays
+# A screen is an UI layer for = buttons, clickable areas, overlays
 
 # Button smash for Snowball fight screen
 screen mash_snowballfight():
@@ -286,7 +286,7 @@ screen debug_hitbox_picnic:
     add Solid("#ffff0088") xpos picnic_x ypos picnic_y xsize picnic_w ysize picnic_h
 
 
-#inventory screen
+# Inventory screen
 screen inventory_screen():
     tag menu
 
@@ -306,6 +306,13 @@ screen inventory_screen():
                 text "Your inventory is empty."
 
             textbutton "Close" action Return()
+
+
+# Safe screen
+screen safe_keypad():
+    #MOET NOG SAFE IMG MAKEN EN TOEVOEGEN
+    add images/safe.png
+
 
 # =================
 # LABELS          
@@ -673,7 +680,6 @@ label cake_interaction:
                 n "I told you to calm it down a notch, you were planning on eating the whole thing, werent you?"
                 n "Not even that - if you decided it to eat it with your bare hands, you would've definetly gobbled that piece up without knowing."
                 n "I knew it, i knew this place was weird from the beginning."
-                n "Who in their right mind would do such a thing."
                 z "But whats that crumpled thing in the middle, though?"
                 z "It kind of looks like paper.."
                 "You try to pry the crumpled up object out of the inside of the cake with your fork."
@@ -684,13 +690,13 @@ label cake_interaction:
                 "Giving it another look, you see three young girls smiling for the photo, two with partyhats and.."
                 z "Wait- thats me!"
                 z "You see yourself standing next to the girl, who's in the middle"
-                z "Why.. am i in this photo? and the girl next to me, she looks awfully allot like the girl from my dream."
+                z "Why am i in this photo? and the girl next to me, she looks awfully allot like the girl from my dream."
                 n "...What do you mean, your saying you saw HER in your dream?"
                 n "This doesn't make any sense, out of everyone.."
                 n "Why would she.."
                 "What, she knows this girl too?"
                 "Why is she acting so secretive about it?"
-                n "Besides that, this photo.. why is this here out of all places."
+                n "Besides that, this photo.. why is this here?"
                 z "Well, most importantly, why are we in this photo in the first place?"
                 "Thinking back, that girl did ask you if you remembered her."
                 "Did you really know her all this time?"
@@ -699,7 +705,7 @@ label cake_interaction:
                 "You notice the same strawberry shortcake in the photo, with the names now being visible:"
                 "{i}Happy 9nth birthday Inaya AND Noor!{/i}"
                 z "Hmm, guessing by the girls wearing a partyhat, i assume the girl from my dream is named Inaya"
-                z "The other girls name... "
+                z "The other girls name on the other hand... "
                 z "That's strange, the other girls name is Noor?"
                 z "Wow, what a coincidence.. am i right?"
                 n "You... can't be that oblivious."
@@ -763,10 +769,52 @@ label cake_interaction:
 
 label safe_interaction:    
     z "I think questioning why there's a safe and why it's here is just going to waste our time, so let's just figure out how to open this."
-    n "Hmm, we finally agree on something."
-    n "Though we don't have a key or something to open this up."
-    z "Your right.. can't we just throw it hard on the ground and see if it breaks?"
-    z "I may not look like it, but im somewhat strong enough to throw "
+    n "Hmm, we finally agree on something for once."
+    z "Though we don't have a key or something to open this up."
+    z "Can't we just throw it hard on the ground and see if it breaks?"
+    z "Andd i take it back, how about we actually use our brains instead of relying on brawn? Look, we don't even need something physical to open this up."
+    n "It has a keypad built in, it says it requires a four digit code."
+    z "Hmm, i think i've seen something before with that amount of numbers..."
+    n "See? lets crack this thing!"
+
+    #FAKE MENU/PLACEHOLDER FOR SAFE_KEYPAD!!!!!!!!!
+    menu:
+        "try to open the safe":
+            "You somehow guess the code."
+            jump safe_open
+
+label safe_open:
+    "The safe clicks open"
+    "Inside lies a colourful bracelet, the beads each have a letter written, intrigued, you take a look."
+    #show bracelet cg art
+    z "This bracelet, it has our names written!"
+    "Your name, Noor's and Inaya's name are spelled on the bracelet, this reminds you of having something similair."
+    n "... the pin, and now the bracelets?"
+    z "This one rings a bell.."
+    z "Like with the hairpin, i think i've seen this bracelet before."
+    n "You sure? Aren't you mistaking this with something else?"
+    #show inventory screen and let player click the old rusty bracelet
+
+    #FAKE MENU/PLACEHOLDER FOR INVENTORY_SCREEN
+    menu:
+        "choose the item that's most identical":
+            "Old rusty bracelet":
+                "You choose the old rusty bracelet and compare both items with eachother"
+                "Their almost identical, other than yours being a little faded, the colours, beads and string match completely."
+                jump bracelet_reconciliation
+
+label bracelet_reconciliation:
+    n "No way, it's exactly-"
+    z "The same thing! I knew it, i knew i saw this bracelet somewhere!"
+    n "But how? these are so old, we made these way back then."
+    n "Even i lost mine for some time now, but you still had yours all this time?"
+    z "Well to be honest, i didn't really remember who the other names were supposed to be."
+    z "I can't really recall my childhood past, i don't know why, but its been like that since forever."
+    z "I didn't even know i had friends, close ones at that, but weirdly enough, time being spent with you in this weird space.."
+    z "it makes me somewhat happy i got to know you, because of all this, i get to see little fragments of what that part of my life was like"
+
+
+
                 
 
 
