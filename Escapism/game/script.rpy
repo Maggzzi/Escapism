@@ -237,7 +237,6 @@ screen playground():
 
     imagemap:
         ground "playground.png"
-        hover: "playground_hover.png"
 
         # Swing hotspot
         hotspot (swing_x, swing_y, swing_w, swing_h):
@@ -528,7 +527,7 @@ label seesaw_scene:
         z "O-oh yeah! im sorry, let me get you down!"
         "You stand up, bringing Ha-eun down - You notice she's in a much worser mood than before."
         h "Ugh.. now i'll never be able to play on the seesaw..."
-        h "But still - thank you for trying miss, but i wish there was someone my age who could play with me.."
+        h "Nevertheless - thank you for trying miss, but i wish there was someone my age who could play with me.."
         z "{i}Hmm, what should i do to cheer her up...{/i}."
 
         $ seesaw.stage = SEESAW_PLAYED
@@ -577,8 +576,8 @@ label seesaw_scene:
                 n "It feels so familiar and yet- i just can't remember where ive seen it..."
                 z "That's what i was thinking too! I think ive seen this one for sale in a clothing store before..." 
                 z "Is this.. maybe my hairpin?"
-                n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid, not a soon-to-be-adult like yourself.."
-                z "huh... ill just keep it for now"
+                n "You? I've never seen you with a hairpin before, and this one looks like it belongs to a kid."
+                z "Huh... ill just keep it for now"
                 "You put the items in you got in you pocket, still contemplating wether these items are usefull or not"
                 jump playground_hub
 
@@ -603,7 +602,7 @@ label picnic_scene:
     scene picnic table prototype
 
     "You notice strange items on the picnic table, and wonder who put them there."
-    z "Why... is there a safe.... and a cake here?"
+    z "Why is there a safe and a cake here?"
     n "Huh, Maybe these items have a deeper meaning, disguised as random objects."
     n "Or maybe there's more than meets the eye..."
     z "How so?"
@@ -644,78 +643,132 @@ label cake_interaction:
             if cutlery in inventory:
                 z "It seems the cutlery we got actually did come in handy..."
                 z "I mean, who would want to eat cake with their barehands?"
-                n "Chances are that you'd actually do that tho, given how your eating {i}someone elses{/i} birthday cake."
+                n "I bet you'd actually do that, given how your eating {i}someone elses{/i} birthday cake."
                 z "Didnt you just say i had freewill..."
                 n "I mean.. it comes to a certain point."
                 z "We'll eat this together though, im not finishing the whole thing."
-                n "I. am. not. eating. that."
-                z "Come on... just taste it! i'll go first and let you know if its any good."
+                n "..."
+                z "Come on, just taste it! i'll go first and let you know if its any good."
                 n "....."
-                n "if it means getting out of here faster.. okay."
+                n "if it means getting out of here faster.."
 
-                "you use the cutlery that you got from Ha-eun to make even even pieces."
-                "There seems to be strawberry jam flowing out of the cake, which is getting you even more excited to try it out."
+                "you use the cutlery that you got from Ha-eun to make even pieces."
                 "You gave a fork to Noor and use one yourself, you take the first bite and...."
                 "It's delicious! You finish it in one sitting, however, you give a glance on Noors face..."
                 "She doesn't really seem to enjoy it that much."
 
                 n "Of all things, there HAD to be jam inside..."
-                z "Uh, hate to break it to you, but cakes being filled with jam is pretty common."
-                n "Ugh, i dont like jam at all- never once been a fan of it."
+                z "Uh, but don't cakes normally get filled with jam? it's pretty common."
+                n "That's the point, i dont like jam at all. Never been a fan of it."
                 z "Well atleast you tried it?"
                 n "Whatever, if your done we should go ahead."
-                z "Hold up, let me just finish that one and..."
+                z "Hold up, just let me finish and..."
                 z "?"
                 z "Whats that... weird thing inside? in the middle?"
                 "You see something crumpled up like a ball - and around it there are..."
                 z "Glass shards?"
                 z "Wha-- why are there shards placed inside the cake??"
                 z "But i didn't feel anything sharp in my throat, even while chewing."
-                n "I guess we were lucky we didnt eat the most middle part of it."
+                n "I guess we were lucky we didnt begin eating in the middle."
                 n "I told you to calm it down a notch, you were planning on eating the whole thing, werent you?"
                 n "Not even that - if you decided it to eat it with your bare hands, you would've definetly gobbled that piece up without knowing."
                 n "I knew it, i knew this place was weird from the beginning."
                 n "Who in their right mind would do such a thing."
                 z "But whats that crumpled thing in the middle, though?"
                 z "It kind of looks like paper.."
-                n "Seriously? You really have a knack for poking at everything..."
-                "You ignore Noor's concern and try to pry the  crumpled up object out of the inside of the cake with your fork."
-                "Eventually, you take it out, and it seems to be made of laminated paper."
+                "You try to pry the crumpled up object out of the inside of the cake with your fork."
+                "Eventually, you take it out, and it seems to be made of paper."
                 "Trying to straighten the paper, you see it for what it actually is:"
-                z "This is.. a photo!"
-                #scene birthdayp photo 
+                z "This is.. a photo."
+                #scene birthday photo 
                 "Giving it another look, you see three young girls smiling for the photo, two with partyhats and.."
                 z "Wait- thats me!"
                 z "You see yourself standing next to the girl, who's in the middle"
                 z "Why.. am i in this photo? and the girl next to me, she looks awfully allot like the girl from my dream."
                 n "...What do you mean, your saying you saw HER in your dream?"
                 n "This doesn't make any sense, out of everyone.."
-                n "Why would she.. in your dream.."
+                n "Why would she.."
                 "What, she knows this girl too?"
-                "Why is she acting so secretive?"
+                "Why is she acting so secretive about it?"
                 n "Besides that, this photo.. why is this here out of all places."
                 z "Well, most importantly, why are we in this photo in the first place?"
                 "Thinking back, that girl did ask you if you remembered her."
                 "Did you really know her all this time?"
-                "You try to really examine your surroundings in the photo, giving a closer look at the items that are present."
+                "You try to examine the surroundings within the photo, giving a closer look at the items that are present."
+                # ADD A IMAGEMAP WHERE THE PLAYER CAN POINT OUT WEIRD THINGS, LIKE THE CAKE, PIN AND BIRTHDATE
                 "You notice the same strawberry shortcake in the photo, with the names now being visible:"
                 "{i}Happy 9nth birthday Inaya AND Noor!{/i}"
-                z "Hmm, guessing by the girls wearing a partyhat, i assume the girl from my dream is named Inaya!"
+                z "Hmm, guessing by the girls wearing a partyhat, i assume the girl from my dream is named Inaya"
                 z "The other girls name... "
-                z "That's strange, the other girls name is Noor if im not mistaken."
+                z "That's strange, the other girls name is Noor?"
                 z "Wow, what a coincidence.. am i right?"
                 n "You... can't be that oblivious."
                 n "Thats me." 
-                z "Really??? {i}that's{/i} you????"
+                z "??? {i}THAT's{/i} you????"
                 n "What are you trying to say."
                 z "Well, its just that..."
                 z "You both dont look the same!!"
                 z "At al!!"
-                z "You both dont have "
+                n "...People change you know, not that much of a shock in my opinion."
+                z "Hmm, when you put it that way, i guess your right."
+                n "! That's strange, that pin."
+                z "What? Oh, that girl is wearing the same pin i got from Eun-hae earlier!"
+                z "It seems that item is connected to her in some way."
+                z "But where did Eun-hae find this pin? i guess logic doesnt exist in a dream."
+                n "Didn't you say that you remember seeing this somewhere?"
+                n "I think this pin doubles as a birthday gift, it looks clean in the photo and is too flashy for daily wear"
+                z "Oh, that's possible, maybe i got this hairpin way back then for her birthday!"
+                n "Yup, atleast that's what i think.."
+                z "But still, i think we should answer the elephant in the room."
+                z "...Stating the obvious here, but how come you and this \"Inaya\" have the same birthdate??"
+                z "This can't be a coincidence, right???"
+                n "It's not, we celebrated both our birthday's on the same day because it was the weekend."
+                n "My birthday wasn't on the weekend, while that girl's was, so we planned our birthday on the same day so that everyone in the neighbourhood could come."
+                z "Huh, really? It's strange that i can't recall any of that, only the pin is what slighlty stuck with me"
+                z "But i should be able to remember this. I didn't know we had some type of history together, along with this Inaya girl."
+                z "Childhood friends.. i can't believe we were like that, we look so happy!"
+                n "Yeah, probably 'cause its a party idiot."
+                n "... But still, we really were that close, always just the three of us."
+                n "I still remember those days crystal clear, it was my whole childhood afterall - every vacation was spent playing at the park with you guys." 
+                n "Those moments of us were the higlight of when i was a kid, along with another memory i'd rather forget." 
+                "? another memory?"
+                "I want to know what, but i think i shouldn't pry too much."
+                "It's not like we're friends {i}now{/i} anyway."
+                jump safe_interaction
+
+            else:
+                z "Let me just have a little piece, i want to know if i can taste stuff in a dream in general"
+                z "This is a experiment! Science!"
+                n "Whatever rows your boat i guess..."
                 
+                "You try the icing, theres jam coming out of the piece you made with your own hands."
+                "It's delicious, sweet and savo-"
+                # weird glass/crunch noise
+                "ry?"
+                # breathing noise - gasp of air
+                "Wha- what is in my mouth? So sharp.."
+                "I feel like i cant breathe, my pipe is damaged"
+                #cg art of where zuha's mouth blood is coming out
+
+                jump game_over
+
+        "Don't eat the cake":
+            z "I should leave it for later, you should always save the best for last!"
+            n "So your insinuating that your still gonna eat it?"
+            z "Well, i mean... i wanna know how cake tastes in a dream."
+            z "Aren't you getting hungry from all this running around, we should have a break soon."
+            n "If you wanna gobble that up, then be my guest..."
+            jump safe_interaction
+        
+
+label safe_interaction:    
+    z "I think questioning why there's a safe and why it's here is just going to waste our time, so let's just figure out how to open this."
+    n "Hmm, we finally agree on something."
+    n "Though we don't have a key or something to open this up."
+    z "Your right.. can't we just throw it hard on the ground and see if it breaks?"
+    z "I may not look like it, but im somewhat strong enough to throw "
                 
 
-        "Don't eat the cake"
 
 
 
@@ -761,369 +814,11 @@ label cake_interaction:
 
 label start:
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
-
-    scene black
-    play music wind
-
-    "{cps=15}Its so cold.. for how long have i been walking?{/cps}"
-    "{cps=15}The weather this season is no joke. i feel like i'll collapse any second..{/cps}"
-    
-    scene dream forest with fade 
-    "{i}Winter, 20XX{/i}"
-    z "{cps=35}I was almost going to call in sick for today, if only if it werent for that biology test.{/cps}"
-    z "{cps=35}No i mean, school is important - no matter what kind of weather condition.{/cps}" 
-    z "{cps=35}I shouldn't just skip school because theres a snowstorm - with the risk of slipping off the pavement, getting into an accident, and..{/cps}"
-    "{cps=15}...{/cps}"
-    z "{cps=35}I'm so glad i pulled that allnighter though! I thought i was a goner for sure.{/cps}"
-    z "{cps=35}I mean, passing every test with high grades and then flunking the last one?{/cps}"
-    z "{cps=35}..with a 70%%?{/cps}"
-    z "{cps=35}I could never let that happen, even if it killed me!{/cps}" 
-    
-    z "{cps=15}..Hahaha{/cps}"  
-    "{cps=5}......{/cps}"   
-    z "{cps=35}Ugh.. its no use{/cps}"
-    z "{cps=35}I'm trying so hard to distract myself from these heavy gusts...{/cps}"
-    z "{cps=30}and its not even working!{/cps}"
-    z "{cps=35}It's like im not even wearing a-"
-    z "{cps=15}..."
-    z "{cps=15}..coat...{/cps}"
-    
-    scene sideview with fade
-    z "{cps=35}How could i forget something so important?{/cps}"
-    z "{cps=35}..I must've ran off in a fit of anger, because of {i}them{/i}.{/cps}"
-    z "{cps=35}{i}They're{/i} such a pain, i dont want to complain to the counsellor either. Too much of a hassle.{/cps}"
-    z "{cps=35}The worst part is that i'm not even aware of who's been behind it all.{/cps}"
-    z "{cps=35}Stealing my notebooks, sticking gum onto my clothes and now my coat?{/cps}"
-    z "{cps=35}Nevertheless, i also can't remember why i'm outside in the first place, was i going home from school?{/cps}"
-    z "{cps=35}This isn't even the way back home.. where am i go-{/cps}"
-
-    stop music fadeout 1.0
-
-    scene shocked sideview
-    play sound snowball volume 1.9
-
-    z "{cps=90}Wha-{/cps}"
-
-    scene black
-    z "{cps=70}My head, something cold hit my head just n-{/cps}"
-
-    lg "{cps=40}Bullseye!!{/cps}"
-
-    scene dream girl encounter with fade
-    play music wind fadein 1.0
-
-    lg "{cps=40}That was such a hard throw to pull off..{/cps}"
-    lg "{cps=40}But i STILL did it! a HEADSHOT at that!!{/cps}"
-    z "{cps=15}Uhm..{/cps}"
-    lg "{cps=40}Oh, sorry, did I brag too much? It's just been ages since i've had aim this good - especially in a snowstorm like this?{/cps}"
-    lg "{cps=40}You'd think im lying, but well, it's you that got hit, so you gotta, no HAVE to believe it!{/cps}"
-    lg "{cps=40}Besides, we're bff's right? i wouldn't do that to just to any stranger!{/cps}"
-    z "{cps=5}...{/cps}"
-    z "{cps=15}Me..{/cps}"
-    z "{cps=15}and YOU?{/cps}"
-    lg "{cps=35}wh- come on! I know its hard to recognize me because of the mist, but you can't be this dense! Are you doing it on purpose??{/cps}"
-    lg "{cps=35}..Hehe, or did i hit you'r head {size=+5}that{/size} hard?{/cps}"
-    z "{cps=40}Look kid.. i don't know what you're babbling about, but i need to get home!{/cps}"
-    lg "{cps=15}...{/cps}"
-    lg "{cps=40}Assuming {i}those{/i} odds, there's only a one-in-a-million chance you'll get there{/cps}"
-    lg "{cps=40}The other options are: A, slipping off the pavement and hitting you're head for real, or B, get into an accident.{/cps}"
-    z "{cps=35}Well, then why are {i}you{/i} outside?? aren't you scared of that happening to you too?{/cps}"
-    lg "{cps=35}...Hmm i'll tell ya..{/cps}"
-    lg "{cps=35} IF you beat me on a one on one snowball fight!{/cps}"
-    z "{cps=35}??? right NOW? you just said-{/cps}"
-    lg "{cps=35}What? seems to me that your'e just too scared to lose!~{/cps}"
-    lg "{cps=35}Don't worry, ill fake it and let you win, but only once!"
-    z "{cps=35}I'm sorry, but i can't play with you. I really need to get home and so do yo-"
-    lg "{cps=75}After this i'll tell you the way to get back home, whether you lose or not!{/cps}"
-    lg "{cps=35}I know my way around here better than you, heck - i'll even walk you to your place so options A and B don't happen!~"
-
-    scene black 
-    "{cps=35}...{/cps}"
-    "{cps=40}{i}I don't trust her at all.{/i}{/cps}"
-    "{cps=40}{i}First of all, why does she keep referring to me as her bff? I hardly even know her!{/i}{/cps}"
-    "{cps=40}{i}and secondly, How does she know the way back to MY house?{/i}{/cps}"
-    "{cps=40}{i}Is it possible that i know her? maybe she's my neighbour or something?{/i}{/cps}"
-    "{cps=40}{i}Strange things have been happening ever since ive been walking this neverending road..{/i}{/cps}"
-    "{cps=40}{i}But this might be my only chance to get back home.{/i}{/cps}"
-
-    
-    z "{cps=40}Okay, fine. I'll play you're game, but you WILL show me the way alright?{/cps}"
-    z "{cps=40}Also thank you, but you don't have to walk me back home. {size=-5}that's kind of embarassing..{/size}{/cps}"
-    lg "{cps=40}YEAYAA!!!! You won't regret this!! trust me!~~{/cps}"
-    z "{cps=15}I hope so..{/cps}"
-    
-    call mash_event_snowballfight from _call_mash_event_snowballfight
-    jump after_snowball_fight
+    call snowball_dream
+    call infirmary
+    call arrival_dreamspace
 
 
-label after_snowball_fight:
-
-    scene snowball fight won
-    play sound snowball volume 1.9
-
-    z "Uhoh..."
-    
-    scene black
-    play sound thud volume 1.9
-    "{cps=40}!{/cps}"
-    z "{cps=40}Hey kid are you okay?{/cps}"
-    "{cps=40}{i}I ran as fast i could to her, checking if she was alright{/i}{/cps}"
-    z "{cps=40}Hey.. are you still there? Im sorry! i should've checked how hard i was throwing!{/cps}"
-    "{cps=40}{i}Im getting scared.. did she faint?{/i}{/cps}"
-    "{cps=40}{i}I was checking her pulse, she's luckily still breathing and surprisingly felt warm to the touch{/i}{/cps}"
-    "{cps=40}{i}I picked her up, shaking her a little, in the hope she would open her eyes.{/i}{/cps}"
-
-    scene checking with vpunch
-    z "Wake up.. wake up!!"
-    play sound shaking 
-    "{cps=40}No matter how many times i shake her, she won't open her ey-{/cps}"
-    "..."
-    "{cps=15}{i}Huh..{/i}{/cps}"
-    "{cps=40}{i}Since when did she get so large? i could've sworn she had the body of a little kid...{/i}{/cps}"
-    "{cps=40}{i}Her hair also seems longer than before, what's going on?{/i}{/cps}"
-    "{cps=40}{i}I gave a closer look at her, her face was covered by her bangs.{/i}{/cps}"
-
-    #wind
-    stop music fadeout 1.0
-
-    scene checking changed 
-    with vpunch 
-    play sound reveal 
-   
-
-    play music ominous
-    c "{cps=30}You...{/cps}"
-    "!"
-    c "{cps=40}Why do you never leave us alone? Acting like your so innocent.{/cps}"
-    c "{cps=40}I knew that deep down, she was right all along.{/cps}"
-    c "{cps=40}Your scum. That's what you are.{/cps}"
-    c "{cps=40}Just like the rest of those two-faced morons{/cps}"
-    "{cps=30}{i}I.. {/i}{/cps}"
-    c "{cps=30}It's all your fault{/cps}{nw}"
-    c "{cps=30}If only if i was there on time{/cps}{nw}"
-    c "{cps=30}If only \"!?!?\" had listened to me{/cps}{nw}"
-    c "{cps=30}This wouldn't have happened if-{/cps}{nw}"
-    stop music fadeout 1.0
-
-
-    scene horrifying with pixellate
-    play sound thud 
-
-    play sound horrifying_noise
-    "{cps=30}I feel sick to my stomach, like im gonna hurl any moment{/cps}"
-    z "{cps=30}Why am i feeling hot and cold at the same time??{/cps}"
-    z "{cps=30}What's happening today? Ever since ive been walking, weird things keep on happening{/cps}"
-    c "{cps=30}Hey.. you there?{/cps}"
-    z "{cps=30}I don't care anymore!! i just wanna go home!{/cps}"
-    c "{cps=30}Can you here me??{/cps}"
-    z "{cps=30}Please, somehow! Let me escape this realit-{nw}{/cps}"
-
-    stop sound 
-    scene stare with vpunch
-    c "HEY!"
-    z "!!!"
-    c "{cps=30}Oh, finally! I thought you were faking it for sure{/cps}"
-    z "{cps=30}Hold on? ..Aren't you?{/cps}"
-    c "{cps=30}I?? aren't i what?{/cps}"
-    "{cps=30}Huh.. was i dreaming? Did she wake me up just now?{/cps}"
-    c "{cps=25}Haa..{/cps}"
-
-    c "{cps=40}Damn.. your really out of it.. {/cps}"
-    c "{cps=40}You look like you've seen a ghost{/cps}"
-    "{cps=40}The girl, who was staring right into my soul, decided to sit back{/cps}"
-    "{cps=40}{size=-5} (i guess she realized how dumbfounded i seemed){/size}{/cps}"
-
-    scene infirmary concerned with pixellate
-    "{cps=30}{i}I take a good look at my surroundings, i think i recognize this place{/i}{/cps}"
-    "{cps=30}{i}The school infirmary!{/i}{/cps}"
-    "{cps=30}{i}Though that's odd.. what am i doing here?{/i}{/cps}"
-    "{cps=30}{i}Especially with this girl.. I don't even know her name!..{/i}{/cps}"
-    "{cps=30}{i}...But i did see her in my dream just now.{/i}{/cps}"
-    c "{cps=30}So are you gonna stay quiet the whole time or what? Aren't you gonna ask me why i woke you up in the first place?{/cps}"
-    "{cps=40}{i}Oh right! Seems like a good oppurtunity to ask her...{/cps}"
-
-    jump question_classmate
-    
-
-label question_classmate: 
-    scene infirmary cheeky
-    c "{cps=40}Ask away, it's not like we're skipping next lecture on {i}purpose{/i}{/cps}~"
-
-    menu: 
-        "What? we're skipping our lecture??":
-            scene infirmary concerned 
-            c "{cps=40}Woah, i knew you were a nerd, but being {i}that{/i} concerned for school?{/cps}"
-            c "{cps=40}Relax, i was just kidding, its lunchbreak.{/cps}"
-            z "{cps=40}Oh thank god, i thought you were serious..{/cps}"
-            c "{cps=40}Heh, when have i ever been serious about school?~{/cps}"
-            z "{cps=40}Never?{/cps}"
-            scene infirmary cheeky
-            c "{cps=40} Exactly{/cps}"
-            jump question_classmate
-
-        "Who are you again?":
-            scene infirmary thinking
-            c "..."
-            c "{cps=40}Your serious..?{/cps}"
-            scene infirmary concerned
-            c"{cps=40}We're in the same class!{/cps}"
-            z "{cps=40}...{/cps}"
-            c "{cps=40}I gave you my gum!{/cps}"
-            z "{cps=40}Hmm...{/cps}"
-            c  "{cps=40}I'm the new transfer student...{/cps}"
-            z "{cps=40}Oh! is your name Noor by any chance?{/cps}" 
-            n "{cps=40}..Wow, now i know what it feels like to just be remembered by a label. {/cps}"
-            z "{cps=40}..Sorry{/cps}"
-            scene infirmary cheeky
-            n "{cps=40}It's okay, i did the same thing when trying to remember you too{/cps}"
-            z "{cps=40}..Wow..{/cps}"
-            jump question_classmate
-
-        "Why are we in the infirmary?":
-            scene infirmary thinking
-            n "{cps=40}you forgot THAT too? To think we had such an wholesome moment together, forgotten...{/cps}"
-            z "{cps=30}Uhm{/cps}"
-            z "{cps=15}What did we do....{/cps}"
-            n "{cps=40}You came to my rescue when i collapsed and you brought me here!"
-            n "{cps=40}Though i told you to just use my wheelchair, but instead, you insisted to..{/cps}"
-            z "{cps=15}Insisted what...{/cps}"
-            scene infirmary cheeky
-            n "{cps=40}To carry me.{/cps}"
-            n "{cps=15}{i}Bridal Carry Style{/i}{/cps}"
-            z "{cps=40}Nooo.....{/cps}"
-            "{cps=40}{size=-5}Why did i do something so embarassing.....{/size}{/cps}"
-            jump question_classmate
-
-
-        "Did you hear me talking in my sleep?":
-            scene infirmary thinking
-            z "{cps=40}Did i say something weird? I think i was having a nightmare{/cps}"
-            z "{cps=40}..and i saw you taunting me in my sleep..{/cps}"
-            z "{cps=40}It was probably when you were trying to wake me up tho, so it might not be that important.. but still.{/cps}"
-            z "{cps=40}It seemed like you wanted to tell me something, like i was being blamed for.. {/cps}"
-            scene infirmary concerned
-            "..."
-            z "{cps=40}Nevermind it's probably nothing...{/cps}"
-            n "{cps=40}Yeah, don't think too much about it.{/cps}"
-            n "{cps=40}You were giving me the creeps back there, i was almost gonna...{/cps}"
-            scene infirmary thinking
-            n "{cps=40}Nevermind.{/cps}"
-
-            jump dozing_off
-
-label dozing_off:
-    "{cps=30}{i}You talk with Noor for a while, asking what she thinks about the school{/i}{/cps}"
-    "{cps=30}{i}She says that she chose to come here specifically for a \"special\" person{/i}{/cps}"
-    "{cps=30}{i}... You sensed a bad feeling{/i}{/cps}"
-    "{cps=30}{i}Your chat goes on for quite a while, {i}so{/i} long that you feel kind of tired..{/i}{/cps}"
-    "{cps=30}{i}The both of you felt incredibly sleepy, like you two hadn't slept for days{/i}{/cps}"
-
-    scene sleepy
-    z "{cps=40}Hey... are you dozing off? We can't sleep here you know..{/cps}"
-    n "{cps=40}I'm not...  don't worry. Rather, worry about yourself, your yawning every five seconds.{/cps}"
-    z "{cps=40}Oh.. really, i didn't know...{/cps}"
-    z "{cps=15}that..{/cps}" 
-    play sound thud
-    scene black with vpunch
-    "{cps=30}{i}You both go in a deep sleep, you feel like you've never been this tired before...{/i}{/cps}"
-
-    scene horrifying
-    play sound horrifying_noise
-    z "{cps=40}Huh.. what's this feeling...{/cps}"
-    z "{cps=40}I feel like i've felt this way before..{/cps}"
-    z "{cps=40}When was that again..?{/cps}"
-    
-    scene noor sleepy with fade
-    z "{cps=40}!!!{/cps}"
-    z "{cps=40}What? why am i here... again?{/cps}"
-    z "{cps=40}Hey are you there?{/cps}"
-    z "{cps=40}Oh no, is she breathing properly?{/cps}"
-    "{cps=40}{i}You try to check her pulse.{/i}{/cps}"
-    "{cps=30}{i}You can't feel any movement.{/i}{/cps}"
-    z "{cps=30}No way.. is she really?{/cps}"
-    "{cps=30}{i}You lay your head on her chest, trying to hear her heartbeat{/i}{/cps}"
-    "{cps=15}...{/cps}"
-    scene shes awake 
-    n "{cps=40}So, figured it out yet?{/cps}"
-    z "{cps=70}WAH!{/cps}"
-    z "{cps=40}Oh my god you scared me!{/cps}"
-    n "{cps=40}I would say the same to you...{/cps}"
-
-    "{cps=30}{i}You try to help her stand up{/i}{/cps}"
-    scene standing up
-    z "{cps=30}{i}Be carefull, watch your step{/i}{/cps}"
-    n "{cps=30}{i}...Thank you{/i}{/cps}"
-
-    "{cps=30}{i}Both you and Noor look up, trying to firgure out where they just landed{/i}{/cps}"
-
-    scene playground with fade
-    "{cps=30}{i}This place reminds you of the same place as in your dream{/i}{/cps}"
-    "{cps=30}{i}Snowy, trees everywhere, but it seems like youre at a playground.. kind of atleast.{/i}{/cps}"
-    z "{cps=30}This is! This is the same type of place i saw in my dream earlier!{/cps}"
-    n "{cps=30}...Your joking{/cps}"
-    z "{cps=30}Why am i back here again... Why do i have to relive this...{/cps}"
-    z "{cps=30}What has this got to do with you too, Why are you here??{/cps}"
-    n "{cps=30}Calm down man, you're overthinking it. If what you saying is true, then doesn't that mean that we're in a dream rightnow?{/cps}"
-    z "{cps=20}Hmm.. yeah obviously.{/cps}"
-    n "{cps=30}Look, let's try to confirm if this is a dream, just to be certain.{/cps}"
-    z "{cps=30}I.. guess so.{/cps}"
-    jump confirming_dream
-
-label confirming_dream:
-    n "{cps=30}Let's confirm it{/cps}"
-
-    menu:
-        "Ask her to slap you":
-            z "{cps=30}Look, i know this seems crazy of me to ask, but slap me.{/cps}"
-            z "{cps=30}I believe that if your in a dream, you can't feel pain right?{/cps}"
-            z "{cps=30}I know that this seems crazy, but i want to try out every possibility to figure out if we're in this shared dre-{/cps}{nw}"
-            play sound faceslap
-            z "!!!"
-            "..."
-            n "{cps=40}So.. did you feel anything?{/cps}"
-            z "{cps=40}..Only the element of surprise, fortunately{/cps}"
-            z "{cps=20}{i}This girl definetely has a screw loose!{/i}{/cps}"
-            jump dream_confirmed
-
-        "Ask her what she remembers":
-            z "{cps=30}Just to check if we both remember what happened, what can you recall up untill now?{/cps}"
-            n "{cps=30}I remember waking you up from your earlier nightmare..{/cps}"
-            z "{cps=30}Yeah..{/cps}"
-            n "{cps=30}then talking with you for quite a bit..{/cps}"
-            z "{cps=30}Uh huh..{/cps}"
-            n "{cps=30}and we both felt sleepy and dozed off!{/cps}"
-            z "{cps=30}Yeah! I think that's about right!{/cps}"
-            jump dream_confirmed
-
-label dream_confirmed:
-    z "{cps=30}Hmm, so we're really in a dream afterall.{/cps}"
-    n "{cps=30}Yeah, now that that's settled, we still have to figure out the \"why\" to this.{/cps}"
-    "{cps=30}{i}You decide to give a closer look at your surroundings, the place resembles an eerie looking playground.{/i}{/cps}"
-    "{cps=40}{i}There's ordinary playground equipment, such as swings, a seesaw and a picnic table, but you also see things that feel slightly off to be there.{/i}{/cps}"
-    "{cps=40}{i}Things like a safe, cake, and worst of all, a door standing in the middle of nowhere are nearby the area.{/i}{/cps}"
-    "{cps=30}{i}You also see Children that seem to be playing in the playground, well, most of them, some of them are just.. sitting.. alone.{/i}{/cps}"
-
-    n "{cps=40}Hey, i can be wrong, but this place, does it remind you of somewhere you've been before?{/cps}"
-    z "{cps=40}What? no, not really.. this place is just giving me the creeps!{/cps}" 
-    n "{cps=40}Hmm, seems like my theory was incorrect then.{/cps}"
-    z "{cps=40}Huh, what theory?{/cps}"
-    n "{cps=40}...Well, i presume were stuck in your dream right now - because earlier you told me that this dream looked allot like the first dream you had.{/cps}"
-    n "{cps=40}And if that's true - I thought, \"is it possible that we're seeing something from your point of view of something? like a fond memory?\"{/cps}"
-    z "{cps=40}Oh wow, now that i think about it.. that does make sense!{/cps}"
-    z "{cps=40}One thing im certain of, is that this place reminds me allot of the dream i had earlier; same snowy conditions, the same tall dark trees, things like that.{/cps}"
-    z "{cps=40}i was being forced to play with this little girl in my dream, and after i misjudged my strength and tried to check on her she...{/cps}"
-    z "{cps=40}!{/cps}"
-    z "{cps=40}What if - instead of MY memories - this place is connected to that GIRL'S memory?{/cps}"
-    z "{cps=40}The fact that children are here, and that were in a playground, makes {i}this{/i} theory more.. well-founded!{/cps}"
-    n "{cps=40}That does seem more likely - good job on figuring it out! Look's like your not entirely useless after all!{/cps}"
-    z "{cps=40}What's that supposed to mean...{/cps}"
-    n "{cps=40}I think that it's a good idea to explore the area because i don't think that we'll wake up anytime soon.{/cps}"
-    n "{cps=40}And who knows, maybe our ticket out of here is that very obvious looking door with the kid guarding it.{/cps}"
-
-    jump playground_hub
 
 
 
