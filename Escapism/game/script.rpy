@@ -13,7 +13,7 @@ define c = Character("????", color="#ddbf22")
 define n = Character("Noor", color="#ddbf22")
 
 #lg (little girl) character defined
-define lg = Character("???", color="#b84756")
+define lg = Character("???", color="#e295a0")
 
 
 # NPC's 
@@ -24,9 +24,11 @@ define s = Character("???", color="#40c5c5")
 define h = Character("???", color="#c54040")
 #fortune teller 
 
-#bully 1
+#fortune teller
+define f = Character("Mister Fortune", color="#4c3b8a")
 
-#bully 2
+# little zuha
+define lz = Character("Kid Zuha", color="#a5cf94")
 
 
 # =================
@@ -66,8 +68,9 @@ init -1 python:        #init -1 loads before normal init blocks
 
     # Fortune teller
     STARTING = 0
-    FAILED = 1
-    HALFWAY_PASSED = 2
+    CORRECT_ANSWERS_FIRST_HALF = 6 # 7 doesn't count
+    FAILED_FIRST_HALF = 1
+    
     FULLY_PASSED = 3
 
     # Light switch
@@ -132,6 +135,11 @@ default safe_x = 600
 default safe_y = 300
 default safe_w = 120
 default safe_h = 120
+
+
+# Fortune teller 
+default correct_answer = 0
+default wrong_answer = 0
 
 # =================
 # OBJECTS 
@@ -821,11 +829,8 @@ label bracelet_reconciliation:
     z "Judging by the bracelets and birthday party, i can gather that we were great friends Noor."
     z "Along with that other girl ofcourse, but for some reason, her presence seems still somewhat foggy for me."
     n "Ah, i see, then maybe.."
-    n "{size=-10}Uhm, w-would you still...-{/size}"
-    z "Huh, what was that?"
-    n "{size=-15}I said, would you still want t-{/size}"
-    z "Huhh?"
-    n "*Sigh*, im SAID if you'd still want to be friends with me!!!"
+    n "Would you like to be like that, how we were before?"
+    n "So much time has passed since... \"that\" time, we should catch up again after this is over, properly."
     z "Oh?"
     n "Just answer, untill i regret asking you in the first place."
 
@@ -833,23 +838,23 @@ label bracelet_reconciliation:
         "Yes":
             label friendship_continued:
                 z "Well, ofcourse! Sorry if i gave the wrong impression earlier."
-                z "In the beginning of this mess, i was almost going to have a full-blown panic attack, but you comforted and helped me along the way."
-                z "If im being honest, i thought you were just some popular mean girl that got caught up in this crossfire and had to just deal with it, but it seems like this was fate."
+                z "In the beginning of this mess, i almost had a full-blown panic attack, but you comforted and helped me along the way."
+                z "If im being honest, i thought you were just some popular mean girl that got caught up in this crossfire and had to just deal with these circumstances, but it seems like this was fate."
                 z "This whole time i misjudged your character, but im seeing clearer thanks to whats been happening up untill now." 
-                z "I'm fully confident that we can make it out of here together!"
+                z "I'm fully confident that we can make it out of here together, as {b}friends{/b}!"
                 n "..."
                 n "... You really don't remember, do you..."
                 n "I thought you were ignoring it this whole time, and yet..."
                 z "Huh, what's wrong??"
                 "Is she.. crying?"
-                n "I've been so awfull to you, with the gum sticking, stealing notebooks..."
-                n "I was doing what i thought was right itself, but now, i just feel pathetic."
+                n "I-i've been so awfull to you, sticking gum onto you hair, stealing those notebooks..."
+                n "I was doing what i thought was right itself, but now, i just feel pathetic.."
                 "Wait.. is she?"
                 z "Were YOU the one bullying me this whole time?? I.."
                 "Noor nodded, i can't believe it."
                 z "Wow, i just.."
                 z "Why?"
-                z "Why were you doing this to me? I didn't even know you up untill now!"
+                z "Why were you doing that to me? I didn't even know you up untill now!"
                 z "Did you have some kind of grudge or something, i never even did anything to you-"
                 n "But you DID!"
                 z "!"
@@ -863,22 +868,27 @@ label bracelet_reconciliation:
                 n "But Inaya always saw me in a different light, she told me i could achieve anything despite my flaws, she stood up for me, and even though i didnt like the saving bit."
                 n "It felt like i finally got recognised for what i could be, not what i {i}should{/i} be."
                 n "And after that, you came and saved Inaya from that previous fight at the swing, i really thought you and Inaya were similair, but.."
-                n "Something happened between the two of you, and ever since that day.."
+                n "Something happened, and ever since that day.."
                 n "I had been loathing you ever since..."
                 "I... "
-                "I dont even know what to say. Me and Inaya? What could have possibly happened?"
+                "... I dont even know what to say. What could have possibly happened?"
                 z "What happened between me and her? Tell me."   
-                n "I swear, i believe you. I know you can't recall your memories, and thats why i feel terrible for the way i treated you the whole time."
+                n "I-i know you can't recall your memories, and thats why i feel terrible for the way i treated you the whole time."
                 n "But i promise to tell you everything once we get out of here."
                 n "I know it's hard to trust me, since the truth about me has been revealed, but i'm sincere about this"
                 n "You deserve to know Zuha. And im truly sorry for all this, if you could find it in your heart to forgive me, i.."
-                z "... Okay, i trust you."
+                z "..."
+                z "Okay, i trust you."
                 n "!"
                 "I want to ask more, what could i have possibly done for Noor to be breaking in tears like this."
-                z "For now, I think we went everywhere except the door, i think that's our most logical way out of here."
+                z "For now, I think we completed every "challenge", so we should go back to that fortune teller, i think that door he's guarding is our most logical way out of here."
                 z "I still have mixed feelings about what happened, but i still plan to leave this place with you, together."
-                n "T-Thankyou."
-                jump playground_hub 
+                n "!"
+                n "Thankyou, Zuha"
+                
+                #PLACEHOLDER: MOET EIGENLIJK PLAYGROUND_HUB JUMPEN ZODAT SPELER ZELF OP FORTUNE TELLER KAN KLIKKEN
+                #jump playground_hub 
+                jump fortune_teller
 
 
 
@@ -888,7 +898,7 @@ label bracelet_reconciliation:
                 z "I'd love to, but, i feel like we can't."
                 z "As in, we can't rekindle that same type of friendship we had when we were kids."
                 z "I mean, don't get me wrong, it was fun spending time with you and solving these \"mysteries\", but i feel like after we succesfully get out of here, we'll eventually drift apart, like how we did when we were kids."
-                z "We both have different values and lives outside of this, i envision we couldn't really click with eachother like when we were kids."
+                z "We both have different values and lives outside of this, i envision we couldn't really click with eachother like back then."
                 n "Ah.."
                 n "Well, that makes sense."
                 n "So you were just using me like you did before, i should've known you couldn't change."
@@ -897,15 +907,194 @@ label bracelet_reconciliation:
                 n "Just shut it, i've seen enough, i knew you were the same close minded girl like you were in the past."
                 z "Woah, where is this coming from? I'm sorry, but do you really think we'll be that close again like when we were kids?"
                 n "!"
-                z "You know, we've changed allot since then, do you think we'll have the same personality and interests like we did?"
-                z "It's just impracticle. I'd say - lets just enjoy this last moment before it goes away."
-                n "Y-you expect me to just, let you leave again like how you left us back then? Did you think i was being myself with you because i HAD to out of obligation?"
-                n "I was testing you, but i never thought you'd blatantly spit it out. Atleast think before you act, you really are heartless."
+                z "You know, we've changed allot since then, do you think we'll have the same personality and interests like we did then?"
+                z "Heck, i don't even remember what kind of personality I had, what my interests were.."
+                z "It's just impracticle. Let's just enjoy this last moment before it goes away."
+                n "Your serious.."
+                n "Y-you expect me to just, let you leave again, like how you left us back then? Did you think i was being myself with you because i HAD to out of obligation?"
+                n "I was testing you this whole time, but i never thought you'd blatantly say all this crap."
                 n "Let's just get out of here, i cant stand being with you anylonger."
                 "Somehow, Noor seems upset with me, but i only told her truth! Or did i really go too far?"
-                z "Uhm, we could try going through that door with that guard standing there."
+                z "Uhm, we could try and go through that door with that guard standing there."
                 n "Okay, let's get going."
-                jump playground_hub 
+
+                #PLACEHOLDER: MOET EIGENLIJK PLAYGROUND_HUB JUMPEN ZODAT SPELER ZELF OP FORTUNE TELLER KAN KLIKKEN
+                #jump playground_hub 
+                jump fortune_teller
+
+
+label fortune_teller:
+    f "Ladies, at last, we see eachother again! I presume you have fulfilled the criteria?"
+    f "As mentioned before, you, Zuha Hassan can only solve my challenge if you've succesfully solved every mystery in this space."
+    #dit kan alleen gecheckt worden met variabelen zoals ALL_MISSIONS_DONE, SEESAW_AFTER_PLAYING ect.) 
+    z "Yes, i did. i'm prepared for whatever you got for me!"
+    f "Hmm! Eager, i see? But before we begin, i would like to advise you to answer wisely, be sure you make the right choice!"
+    f "Because if you don't, you'd BOTH meet a terrible fate."
+    n "Wait, what's the challenge?"
+    f "It's a simple memory game, if i'm correct, you must have regained some memories of your childhood by now."
+    f "I will be questioning you on what you remember, specifically about what you uncovered here about your past."
+    f "If you answer every question correctly, you can leave this place alongside with your friend."
+    f "With that all out of the way, are you ready to begin?"
+    z "..."
+    z "Yes, i am."
+    f "Wonderful, let the challenge begin!"
+    "I'm confident enough about everything i know up untill now, especially with the help of Noor."
+    "I can't let her down, i can't let myself down. We have to make it out of here!"
+    f "For my first question, where was your first encounter with the dreamgirl?"
+    menu:
+        "At the swings":
+            #MOET DUBBELE PUNTEN ZETTEN NA ELKE OPTIE OM GOEIE ANTWOORDEN + TE DOEN BIJ VARIABELE CORRECT ANSWERS 
+            $ correct_answer += 1
+
+        "At the seesaw":
+            $ wrong_answer += 1
+
+        "At her birthday":
+            $ wrong_answer += 1
+
+        "At school":
+            $ wrong_answer += 1
+
+    f "What is the dreamgirls name?"
+    menu: 
+        "Inaya":
+            $ correct_answer += 1
+
+        "Alayna":
+            $ wrong_answer += 1
+
+        "Noor":
+            $ wrong_answer += 1
+
+        "Still unknown":
+            $ wrong_answer += 1
+
+    f "Whose birthday got celebrated?"
+    menu: 
+        "Dreamgirl":
+            $ wrong_answer += 1
+            
+        "Zuha":
+            $ wrong_answer += 1
+
+        "Noor":
+            $ wrong_answer += 1
+
+        "Dreamgirl and Noor":
+            $ correct_answer += 1
+
+    f "How old had they both turned?"
+    menu: 
+        "10 years old":
+            $ wrong_answer += 1
+            
+        "9 years old":
+            $ correct_answer += 1
+
+        "8 years old":
+            $ wrong_answer += 1
+
+        "11 years old":
+            $ wrong_answer += 1
+
+    f "What did you get for dreamgirls birthday?"
+    menu: 
+        "Hairbrush":
+            $ wrong_answer += 1
+            
+        "Hairprin":
+            $ correct_answer += 1
+
+        "Friendship bracelet":
+            $ wrong_answer += 1
+
+        "Cutlery":
+            $ wrong_answer += 1
+    
+    f "What did you get for Noor's birthday?"
+    menu: 
+        "Hairbrush":
+            $ wrong_answer += 1
+            
+        "Cutlery":
+            $ wrong_answer += 1
+
+        "Friendship bracelet":
+            $ correct_answer += 1
+
+        "Hairpin":
+            $ wrong_answer += 1
+        
+    f "When did the accident happen?"
+    menu: 
+        "At the park":
+            jump accident_mentioned
+            
+        "At the crosswalk":
+            jump accident_mentioned
+
+        "Near her home":
+            jump accident_mentioned
+
+        "At school":
+            jump accident_mentioned
+
+label accident_mentioned:
+    z "...."
+    z "Accident..? What kind of accident?"
+    f "Hmm? Why are you surprised? Didn't you know what happened between you and Inaya?"
+    z "!"
+    "W-what are you saying, something happened between us?"
+    # use sound that blood (or water is dripping)
+    "drip"
+    "Huh? i feel like somethings coming out of my han-"
+    #show cg art where blood is coming out of bracelet, specifically out of where inaya is written
+    z "......."
+    z "...What... is this...?"
+    z "Why is there blood coming out of the bracelet??"
+    "By inspecting further, it seems that theres specifically blood flowing from Inaya's name!"
+    f "It could be possible that none of the challenges had a direct link to that incident happening.."
+    f "You still haven't told me what this \"accident\" exactly is, Noor, he's lying isn't he?"
+    n "No! Don't tell her!, i'll explain it myself once we get out of here!"
+    "Noor, she looks so.. distraught, is this guy telling the truth?"
+    f "Im afraid that won't be possible, Zuha needs to know her past herself."
+    f "Because this memory hasn't had a direct link to a challenge, the current one will be put on hold for the time being"
+    "The fortune teller goes to his pockets and is handing me.. a key?"
+    f "This key can be used to open this door behind me, it's purpose was to actually let you both leave after finishing my challenge.. but, new plans have been made."
+    f "When your done and have seen everything for yourself, you can come back. We will return to where we left off from there."
+    "This leaves me no choice. The blood coming out of inayas name, Noor panicking, the \"accident\"."
+    "I have to find this out myself, now or never."
+    z "Come on Noor, let's finish this."
+    n "..."
+    n "I've got a bad feeling about this."
+    z "We'll be carefull Noor, we can do this, we've come this far!"
+    n "Your right.."
+    jump accident_revealed
+
+label accident_revealed:
+    scene black with fade
+    "My hands slightly shaking, i push the key in de doorlock and rotate it."
+    #use sound that door is clicked open
+    "Click!"
+    "The door has been opened, i can see faint light from afar."
+    z "Lets go."
+    z "I walk in first, Noor second, as she follows me from behind."
+    z "This space seems to also have a nigh time setting"
+    n " No, it can't be."
+    lg "Hey! come back here coward!"
+    lz "No! You won't believe me anyway!"
+    "Huh, isn't that the girl in my dream, Inaya? I'm also there, as a kid too?"
+    
+
+        
+
+    
+
+    
+    
+
+
+
 
 
     
