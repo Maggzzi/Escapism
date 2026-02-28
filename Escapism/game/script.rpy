@@ -734,12 +734,12 @@ label cake_interaction:
                 z "But i should be able to remember this. I didn't know we had some type of history together, along with this Inaya girl."
                 z "Childhood friends.. i can't believe we were like that, we look so happy!"
                 n "Yeah, probably 'cause its a party idiot."
-                n "... But still, we really were that close, always just the three of us."
-                n "I still remember those days crystal clear, it was my whole childhood afterall - every vacation was spent playing at the park with you guys." 
+                n "... But still, we spent every day at the park, always just the three of us."
+                n "I still remember those days, crystal clear, it was my whole childhood afterall - every vacation was spent playing there with you guys." 
                 n "Those moments of us were the higlight of when i was a kid, along with another memory i'd rather forget." 
-                "? another memory?"
+                "? Another memory?"
                 "I want to know what, but i think i shouldn't pry too much."
-                "It's not like we're friends {i}now{/i} anyway."
+                "It's not like we're friends {i}now{/i} anyway.."
                 jump safe_interaction
 
             else:
@@ -796,23 +796,121 @@ label safe_open:
     #show inventory screen and let player click the old rusty bracelet
 
     #FAKE MENU/PLACEHOLDER FOR INVENTORY_SCREEN
+    "choose the item that's most identical"
     menu:
-        "choose the item that's most identical":
-            "Old rusty bracelet":
-                "You choose the old rusty bracelet and compare both items with eachother"
-                "Their almost identical, other than yours being a little faded, the colours, beads and string match completely."
-                jump bracelet_reconciliation
+        "Old rusty bracelet":
+            "You choose the old rusty bracelet and compare both items with eachother"
+            "Their almost identical, other than yours being a little faded, the colours, beads and string match completely."
+            jump bracelet_reconciliation
 
 label bracelet_reconciliation:
     n "No way, it's exactly-"
     z "The same thing! I knew it, i knew i saw this bracelet somewhere!"
-    n "But how? these are so old, we made these way back then."
-    n "Even i lost mine for some time now, but you still had yours all this time?"
+    n "But how? these are so old, we made these way back when we were kids."
+    n "I even lost mine for quite a while now, but you still had yours all this time?"
     z "Well to be honest, i didn't really remember who the other names were supposed to be."
-    z "I can't really recall my childhood past, i don't know why, but its been like that since forever."
-    z "I didn't even know i had friends, close ones at that, but weirdly enough, time being spent with you in this weird space.."
-    z "it makes me somewhat happy i got to know you, because of all this, i get to see little fragments of what that part of my life was like"
+    z "I can't exactly recall my childhood past, i don't know why, but its been like that since forever."
+    z "I didn't even know i had friends as a kid, close ones at that, but weirdly enough, time being spent with you in this weird space.."
+    z "It makes me somewhat happy i got to know you, because of all this, i got to see these little fragments of what that part of my life was like."
+    n "!"
+    n "..."
+    z "Sorry, am i being too sappy? This is just allot to take in is all, hehe.."
+    n "...Can you really not remember me and.. her?"
+    n "How can one forget a whole chunk of their life?"
+    z "Well, after these recent events... I'm slowly gaining those old memories back, and i hope i remember all of them!"
+    z "Judging by the bracelets and birthday party, i can gather that we were great friends Noor."
+    z "Along with that other girl ofcourse, but for some reason, her presence seems still somewhat foggy for me."
+    n "Ah, i see, then maybe.."
+    n "{size=-10}Uhm, w-would you still...-{/size}"
+    z "Huh, what was that?"
+    n "{size=-15}I said, would you still want t-{/size}"
+    z "Huhh?"
+    n "*Sigh*, im SAID if you'd still want to be friends with me!!!"
+    z "Oh?"
+    n "Just answer, untill i regret asking you in the first place."
 
+    menu:
+        "Yes":
+            label friendship_continued:
+                z "Well, ofcourse! Sorry if i gave the wrong impression earlier."
+                z "In the beginning of this mess, i was almost going to have a full-blown panic attack, but you comforted and helped me along the way."
+                z "If im being honest, i thought you were just some popular mean girl that got caught up in this crossfire and had to just deal with it, but it seems like this was fate."
+                z "This whole time i misjudged your character, but im seeing clearer thanks to whats been happening up untill now." 
+                z "I'm fully confident that we can make it out of here together!"
+                n "..."
+                n "... You really don't remember, do you..."
+                n "I thought you were ignoring it this whole time, and yet..."
+                z "Huh, what's wrong??"
+                "Is she.. crying?"
+                n "I've been so awfull to you, with the gum sticking, stealing notebooks..."
+                n "I was doing what i thought was right itself, but now, i just feel pathetic."
+                "Wait.. is she?"
+                z "Were YOU the one bullying me this whole time?? I.."
+                "Noor nodded, i can't believe it."
+                z "Wow, i just.."
+                z "Why?"
+                z "Why were you doing this to me? I didn't even know you up untill now!"
+                z "Did you have some kind of grudge or something, i never even did anything to you-"
+                n "But you DID!"
+                z "!"
+                "Noor looks really uneasy, like shes trying to tell me something, but something seems to be holding her back."
+                n "... You did do something, and i'd rather forget it, i mean it, but.."
+                n "But you can't recall anything of your past, the time we spent together with just the three of us, right?"
+                n "Did you ever question who Inaya really is? What she's doing and where she is?"
+                "...Now that she mentioned it, i do find it strange that i haven't seen her yet in person, only this once in my dream when she was still a kid.."
+                n "You know, saying that you thought of me as some popular mean girl, i was never like that when i was a kid."
+                n "I was small and weak, and i hated myself because of that. The other kids would ridicule me, pity me. Thinking that i could do nothing on my own."
+                n "But Inaya always saw me in a different light, she told me i could achieve anything despite my flaws, she stood up for me, and even though i didnt like the saving bit."
+                n "It felt like i finally got recognised for what i could be, not what i {i}should{/i} be."
+                n "And after that, you came and saved Inaya from that previous fight at the swing, i really thought you and Inaya were similair, but.."
+                n "Something happened between the two of you, and ever since that day.."
+                n "I had been loathing you ever since..."
+                "I... "
+                "I dont even know what to say. Me and Inaya? What could have possibly happened?"
+                z "What happened between me and her? Tell me."   
+                n "I swear, i believe you. I know you can't recall your memories, and thats why i feel terrible for the way i treated you the whole time."
+                n "But i promise to tell you everything once we get out of here."
+                n "I know it's hard to trust me, since the truth about me has been revealed, but i'm sincere about this"
+                n "You deserve to know Zuha. And im truly sorry for all this, if you could find it in your heart to forgive me, i.."
+                z "... Okay, i trust you."
+                n "!"
+                "I want to ask more, what could i have possibly done for Noor to be breaking in tears like this."
+                z "For now, I think we went everywhere except the door, i think that's our most logical way out of here."
+                z "I still have mixed feelings about what happened, but i still plan to leave this place with you, together."
+                n "T-Thankyou."
+                jump playground_hub 
+
+
+
+            
+        "No":
+            label friendship_discontinued:
+                z "I'd love to, but, i feel like we can't."
+                z "As in, we can't rekindle that same type of friendship we had when we were kids."
+                z "I mean, don't get me wrong, it was fun spending time with you and solving these \"mysteries\", but i feel like after we succesfully get out of here, we'll eventually drift apart, like how we did when we were kids."
+                z "We both have different values and lives outside of this, i envision we couldn't really click with eachother like when we were kids."
+                n "Ah.."
+                n "Well, that makes sense."
+                n "So you were just using me like you did before, i should've known you couldn't change."
+                "Hmm? i sense a weird atmosphere around us, did i word it out wrong?"
+                z "Huh, what do you mean by tha-"
+                n "Just shut it, i've seen enough, i knew you were the same close minded girl like you were in the past."
+                z "Woah, where is this coming from? I'm sorry, but do you really think we'll be that close again like when we were kids?"
+                n "!"
+                z "You know, we've changed allot since then, do you think we'll have the same personality and interests like we did?"
+                z "It's just impracticle. I'd say - lets just enjoy this last moment before it goes away."
+                n "Y-you expect me to just, let you leave again like how you left us back then? Did you think i was being myself with you because i HAD to out of obligation?"
+                n "I was testing you, but i never thought you'd blatantly spit it out. Atleast think before you act, you really are heartless."
+                n "Let's just get out of here, i cant stand being with you anylonger."
+                "Somehow, Noor seems upset with me, but i only told her truth! Or did i really go too far?"
+                z "Uhm, we could try going through that door with that guard standing there."
+                n "Okay, let's get going."
+                jump playground_hub 
+
+
+    
+
+        
 
 
                 
