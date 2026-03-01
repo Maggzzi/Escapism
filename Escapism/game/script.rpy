@@ -903,21 +903,21 @@ label bracelet_reconciliation:
                 z "I'd love to, but, i feel like we can't."
                 z "As in, we can't rekindle that same type of friendship we had when we were kids."
                 z "I mean, don't get me wrong, it was fun spending time with you and solving these \"mysteries\", but i feel like after we succesfully get out of here, we'll eventually drift apart, like how we did when we were kids."
-                z "We both have different values and lives outside of this, i envision we couldn't really click with eachother like back then."
+                z "We both have different values and lives outside of this, i think we couldn't really click with eachother like back then."
                 n "Ah.."
                 n "Well, that makes sense."
                 n "So you were just using me like you did before, i should've known you couldn't change."
                 "Hmm? i sense a weird atmosphere around us, did i word it out wrong?"
                 z "Huh, what do you mean by tha-"
-                n "Just shut it, i've seen enough, i knew you were the same close minded girl like you were in the past."
+                n "Just shut it, i've seen enough, i knew you were the same close minded girl like you were when you were a kid."
                 z "Woah, where is this coming from? I'm sorry, but do you really think we'll be that close again like when we were kids?"
                 n "!"
-                z "You know, we've changed allot since then, do you think we'll have the same personality and interests like we did then?"
-                z "Heck, i don't even remember what kind of personality I had, what my interests were.."
+                z "You know, we've probably changed allot since then, do you think we'll have the same personality and interests like we did then?"
+                z "Heck, i can't even remember what kind of personality I had, what my interests were, and my friends."
                 z "It's just impracticle. Let's just enjoy this last moment before it goes away."
                 n "Your serious.."
                 n "Y-you expect me to just, let you leave again, like how you left us back then? Did you think i was being myself with you because i HAD to out of obligation?"
-                n "I was testing you this whole time, but i never thought you'd blatantly say all this crap."
+                n "I never thought you'd blatantly admit to saying all this nonesense."
                 n "Let's just get out of here, i cant stand being with you anylonger."
                 "Somehow, Noor seems upset with me, but i only told her truth! Or did i really go too far?"
                 z "Uhm, we could try and go through that door with that guard standing there."
@@ -932,11 +932,15 @@ label bracelet_reconciliation:
 
 
 label fortune_teller:
+
+    $ correct_answer = 0
+    $ wrong_answer = 0
+
     f "Ladies, at last, we see eachother again! I presume you have fulfilled the criteria?"
     f "As mentioned before, you, Zuha Hassan can only solve my challenge if you've succesfully solved every mystery in this space."
     #dit kan alleen gecheckt worden met variabelen zoals ALL_MISSIONS_DONE, SEESAW_AFTER_PLAYING ect.) 
     z "Yes, i did. i'm prepared for whatever you got for me!"
-    f "Hmm! Eager, i see? But before we begin, i would like to advise you to answer wisely, be sure you make the right choice!"
+    f "Hmm! Eager, i see! But before we begin, i would like to advise you to answer wisely, be sure you make the right choice!"
     f "Because if you don't, you'd BOTH meet a terrible fate."
     n "Wait, what's the challenge?"
     f "It's a simple memory game, if i'm correct, you must have regained some memories of your childhood by now."
@@ -977,6 +981,7 @@ label fortune_teller:
         "Still unknown":
             $ wrong_answer += 1
 
+
     f "Whose birthday got celebrated?"
     menu: 
         "Dreamgirl":
@@ -990,6 +995,7 @@ label fortune_teller:
 
         "Dreamgirl and Noor":
             $ correct_answer += 1
+
 
     f "How old had they both turned?"
     menu: 
@@ -1005,6 +1011,7 @@ label fortune_teller:
         "11 years old":
             $ wrong_answer += 1
 
+
     f "What did you get for dreamgirls birthday?"
     menu: 
         "Hairbrush":
@@ -1019,6 +1026,7 @@ label fortune_teller:
         "Cutlery":
             $ wrong_answer += 1
     
+
     f "What did you get for Noor's birthday?"
     menu: 
         "Hairbrush":
@@ -1032,8 +1040,8 @@ label fortune_teller:
 
         "Hairpin":
             $ wrong_answer += 1
-        
-    f "When did the accident happen?"
+ 
+    f "Where did the accident happen?"
     menu: 
         "At the park":
             jump accident_mentioned
@@ -1052,13 +1060,13 @@ label accident_mentioned:
     z "Accident..? What kind of accident?"
     f "Hmm? Why are you surprised? Didn't you know what happened between you and Inaya?"
     z "!"
-    "W-what are you saying, something happened between us?"
+    z "W-what are you saying, something happened between us?"
     # use sound that blood (or water is dripping)
     "drip"
     "Huh? i feel like somethings coming out of my han-"
     #show cg art where blood is coming out of bracelet, specifically out of where inaya is written
     z "......."
-    z "...What... is this...?"
+    z "...What... blood?"
     z "Why is there blood coming out of the bracelet??"
     "By inspecting further, it seems that theres specifically blood flowing from Inaya's name!"
     f "It could be possible that none of the challenges had a direct link to that incident happening.."
@@ -1177,7 +1185,7 @@ label accident_revealed:
         n "But when she left this world, it was like i had nobody to go to, you also started to become more distant."
         z "Me?"
         n "I could never see you at the the park again after that, not to mention you left the neighboorhoud without saying something, it's like you left without a trace, not even coming to her funeral."
-        n "That's why i felt the need to torture you, it was mere coincidence - us going to the same highschool." 
+        n "That's why i felt the need to torture you, you think it was mere coincidence - us going to the same highschool?" 
         n "you were my outlet for this built up rage i had within me these last several years."
         z "Well.. hearing it like that..."
         z "I don't even know what to say."
@@ -1191,15 +1199,115 @@ label accident_revealed:
         z "I'm so sorry."
         z "Im so, so sorry."
         z "For the way i treated you, avoided you, pretending like nothing happened."
-        z "I can't remember my childhood days, but i believe you (and not myself s much)."
+        z "I can't remember what i did, and despite that, i believe you.  Even more so after seeing it with my own eyes.."
         n "I hated you for that, for a long time i really did"
-        n "But ever since i realised you'd forgotten most of your childhood memories.. i can't
+        n "But when i realised you'd forgotten most of your childhood..."
+        n "I didn't know how to keep hating you anymore" 
+        z "It's like we both got sent here not just to solve \"mysteries\", but to face reality."
+        z "Stuck here, because i never faced it."
+        z "Because i forced myself to forget."
+        z "Maybe i had to remember. All of it."
+        z "From who my friends were, to how we all went out our own ways after how \"that\" event took place."
+        n "Luckily for us, this was the last fragment you had to remember."
+        n "You think your ready to leave?"
+        z "..Yeah, i can remember everything vividly now."
+        z "Let's go and finish the last game!"
+        n "Okay!"
+        jump fortune_teller_part2
+
+label fortune_teller_part2:
+    f "Ah, you finally returned!"
+    f "Judging from your expression, it seems you have seen *it* for yourself."
+    z "Yeah, i have. Im ready to finish this."
+    f "Well ofcourse, i won't keep you waiting."
+    f "Let the challenge recommence!"
+
+    f "Where did the accident happen?"
+    menu:
+        "At the crosswalk":
+            #MOET DUBBELE PUNTEN ZETTEN NA ELKE OPTIE OM GOEIE ANTWOORDEN + TE DOEN BIJ VARIABELE CORRECT ANSWERS 
+            $ correct_answer += 1
+
+        "At the park":
+            $ wrong_answer += 1
+
+        "Near her home":
+            $ wrong_answer += 1
+
+        "At school":
+            $ wrong_answer += 1
+
+    f "Who got injured?"
+
+    menu: 
+        "Inaya":
+            $ correct_answer += 1
+
+        "Zuha":
+            $ wrong_answer += 1
+
+        "Noor":
+            $ wrong_answer += 1
+
+        "The Bully":
+            $ wrong_answer += 1
+
+    f "What happened after the incident?"
+    menu: 
+        "Noor stayed the same":
+            $ wrong_answer += 1
+            
+        "Inaya recovered":
+            $ wrong_answer += 1
+
+        "Everyone went their own seperate way":
+            $ correct_answer += 1
+
+        "Zuha and Noor would play at the park without Inaya ":
+            $ wrong_answer += 1
+
+    f "What will you do when you'll leave this dream?"
+    menu:
+        "Make up for lost time with Noor!":
+            $ correct_answer += 1
+            jump grading_quiz
 
 
+label grading_quiz:
+    f "Thankyou for your patience, now checking the results."
+    f "! Oh."
+    f "before i tell how what score you got, i would like for you to guess first!"
+    z "Huh?"
+    z "Hmm i think i got a.."
 
+    # Zuha only gets the good ending if she guessed everything right (full scores, otherwise bad ending) the results have to be checked before they get a good or bad ending
+    menu:
+        "5 out of ten":
+            $ guessed_score = 5
+            jump check_results
+        "7 out of ten":
+            $ guessed_score = 7
+            jump check_results
+        "full scores":
+            $ guessed_score = 10
+            jump check_results
+        "1 out of ten":
+            $ guessed_score = 1
+            jump check_results
 
+label check_results:
+    f "Lets see..."
 
+    if correct_answer == 10:
+        f "Impressive! A perfect score."
+        jump good_end
 
+    else: 
+        f "What a shame... You failed my challenge."
+        z "W-what? how is that possib-"
+        jump bad_end
+
+    
 
 
 
