@@ -30,6 +30,8 @@ define f = Character("Mister Fortune", color="#4c3b8a")
 # little zuha
 define lz = Character("Kid Zuha", color="#a5cf94")
 
+define ln = Character("Kid Noor", color="#d8cb8b")
+
 
 # =================
 # CONSTANTS
@@ -136,6 +138,9 @@ default safe_y = 300
 default safe_w = 120
 default safe_h = 120
 
+# Friendship 
+default friendship_discontinued = None
+default friendship_continued = None
 
 # Fortune teller 
 default correct_answer = 0
@@ -917,6 +922,9 @@ label bracelet_reconciliation:
                 "Somehow, Noor seems upset with me, but i only told her truth! Or did i really go too far?"
                 z "Uhm, we could try and go through that door with that guard standing there."
                 n "Okay, let's get going."
+                #friendship_discontinued is set to True
+                $ friendship_discontinued = True
+
 
                 #PLACEHOLDER: MOET EIGENLIJK PLAYGROUND_HUB JUMPEN ZODAT SPELER ZELF OP FORTUNE TELLER KAN KLIKKEN
                 #jump playground_hub 
@@ -1079,12 +1087,123 @@ label accident_revealed:
     "The door has been opened, i can see faint light from afar."
     z "Lets go."
     z "I walk in first, Noor second, as she follows me from behind."
-    z "This space seems to also have a nigh time setting"
+    z "This space also seems to have a night time setting"
     n " No, it can't be."
     lg "Hey! come back here coward!"
     lz "No! You won't believe me anyway!"
-    "Huh, isn't that the girl in my dream, Inaya? I'm also there, as a kid too?"
-    
+    "Huh, isn't that the girl in my dream, Inaya? I can also see myself there, but as a kid too?"
+    lg "Your running away because you know what you did! So why? What did Noor ever do to you?"
+    lg "Not to mention with that bully, you were on her side all this time!"
+    lz "Why would you believe her! I only spoke with her when i fought her that day!"
+    lg "Liar.. those rumors are spreading around like wildfire: you've been talking behind Noors back!"
+    lg "You know how she is, just when she started to show her true self, she's going to be broken after hearing this."
+    lz "Why do you keep insisting that i did all that? I thought that the trust between us was mutual, but instead, you got bought with some cheap lies."
+    lz "It's already turning late and your wasting my time. If you believe her more than me, then i don't see a point of us being friends anymore."
+    # add kick sound
+    lz "Guh!"
+    # thud sound of little zuha falling
+    lg "*pant* If it was about me *pant*, i'd let it slide, but you had to involve my sister?"
+    lg "You've got some nerve to talk all that smack, your known more for fighting, not barking."
+    lz "You!-"
+    ln "Stop it-!!"
+    lz "!"
+    lg "Noor."
+    ln "Why are you guys fighting? It's turning late, let's go home!"
+    lz "Yeah, lets"
+    lg " H-Hey! i'm not done with you, come back!"
+    lz "..."
+    lg "I said come-"
+    #add car screeching car crash sound
+    #show cg art of snowball hitting Zuha from behind her head
+    lg "Huh..?"
+    scene black 
+    z "Wha- its pitch black!"
+    z "Noor are you there?? Hello?"
+    #add timer of 10 sec to turn the light on, player has to move his mouse to guess where the light switch is
+
+    # and player didnt find the light on time
+    if friendship_discontinued:
+        #stab sound
+        z "Hrk—!"
+        "Hah—! M-my stomach!! something sharp..."
+        n "Heh.."
+        n "Well well well, who knew this knife Ha-Eun gave would be this sharp?"
+        z "Kh—! n-noor, y-you..."
+        n "I'm glad i still kept it with me, and the lights going out? This couldn't have been easier."
+        n "I wasn't really planning on doing this Zuha, but all the pieces were falling in my favor, it would have been a shame not to take advantage of these circumstances, right?"
+        #stab sound 
+        z "Ghk—! why.. would you!"
+        n "Why? Didn't you see it for yourself? Because of you, she died."
+        n "I guess i didn't tell you, but it was super obvious: We were sisters, twins."
+        n "I hate to admit it, but i was the weaker shadow of my sister. She always took care of me and believed in me, that i could be more than just a lable made by others."
+        n "But because of you, the only person i could call my true friend dissapeared."
+        n "Inaya got admitted to the hospital and her condition wouldn't change for good.. heh.."
+        n "I should've been the one in her place..."
+        n "You also stopped showing your face at the park, school, and now you want to leave me again. Did you get that bored when you were around Inaya and me?"
+        n "Both the people i could call friends left without a trace, it was only right itself to torture you, and yet that didn't feel enough either."
+        n "I wonder if this'll give me any satisfaction, b-because.."
+        n "I don't feel happy at all."
+        n "Well, atleast this is a dream, you'll wake up feeling better in no time."
+        n "Sweet dreams Zuha <3"
+        jump game_over
+
+    if friendship_continued:
+        z "Ah, the lights!"
+        "The lights are on, i can now clealry check my surroundings, but what's more.."
+        "That fight - no accident. Was that real? I can't believe what i saw."
+        n "Zuha, this place were in seems very strange."
+        z "Wh- Oh, your right - It looks like the both of us are in some type of white void?"
+        "I took a step forward, when suddenly, i felt something on my shoe"
+        #sound paper crumple
+        z "Huh what's this? A newsfolder?"
+        z "I pick up the the paper off the ground."
+        z "!"
+        #cg art newsfolder with headline:
+        #NEWSFOLDER
+            # “9 year old girl car accident near playground xxx 
+            # ”A 9 year old gets heavily injured due to a car accident on xx/xx/xxxx, xx:xx pm. Sources say that the nine year old girl may be fatally wounded.
+        z "Th-this."
+        z "What is all this???"
+        z "This can't be, this didn't happen. If something that tragic happened I would've known, at least something..!"
+        n "No, what you saw was true. Inaya's not here anymore... and it's because of th-"
+        z "No! No No No!! I refuse to accept this. i saw her in my dream, she was completely fine!"
+        n "Zuha.."
+        z "I can't.. why would something like that happen. i.."
+        n "..."
+        n "It happened when we were kids, anyone would have forgotten something like that at such a young age, but I only just realised that."
+        n "Because i was the only kid who remembered it, her death affected me the most, she was my twin sister after all."
+        z "I'm sorry for not telling you this earlier, but the reason why Inaya was so overprotective of me was because i was a much weaker version of her."
+        n "She always feeled the need to have this parental role around me, and strangely enough, i got used to it."
+        n "But when she left this world, it was like i had nobody to go to, you also started to become more distant."
+        z "Me?"
+        n "I could never see you at the the park again after that, not to mention you left the neighboorhoud without saying something, it's like you left without a trace, not even coming to her funeral."
+        n "That's why i felt the need to torture you, it was mere coincidence - us going to the same highschool." 
+        n "you were my outlet for this built up rage i had within me these last several years."
+        z "Well.. hearing it like that..."
+        z "I don't even know what to say."
+        z "I really was a coward, wasn't i?"
+        z "You were grieving.. and i just ran away from it all"
+        z "I can't remember what was going through my head, but what i did was right out wrong."
+        z "I should've stayed."
+        n "Zuha..."
+        z "I left you alone to deal with it all by yourself."
+        #cg art zuha hugging noor
+        z "I'm so sorry."
+        z "Im so, so sorry."
+        z "For the way i treated you, avoided you, pretending like nothing happened."
+        z "I can't remember my childhood days, but i believe you (and not myself s much)."
+        n "I hated you for that, for a long time i really did"
+        n "But ever since i realised you'd forgotten most of your childhood memories.. i can't
+
+
+
+
+
+
+
+
+
+
 
         
 
